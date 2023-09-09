@@ -7,4 +7,29 @@
   html {
     font-family: "Nunito Sans", sans-serif;
   }
+
+  body {
+    @apply bg-v-light-gray dark:bg-vd-dark-blue text-v-dark-blue dark:text-white;
+  }
+}
+
+@layer components {
+  .country-card {
+    @apply w-full rounded-md overflow-hidden bg-white drop-shadow-md dark:bg-dark-blue lg:hover:cursor-pointer;
+  }
+
+  .card-image img {
+    @apply max-w-full aspect-[5/3] object-cover;
+  }
+
+  .card-body {
+    @apply px-6 pt-[30px] pb-12 flex flex-col justify-between gap-y-4;
+  }
+  .card-title {
+    @apply font-extrabold;
+  }
+
+  .card-info {
+    @apply font-semibold;
+  }
 }

@@ -1,1 +1,10 @@
-<p>country-list works!</p>
+<main class="py-8">
+  <div class="container">
+    <div class="grid grid-cols-4 gap-x-[75px] gap-y-[73px]">
+      <rc-country
+        *ngFor="let country of countries"
+        [country]="country"
+      ></rc-country>
+    </div>
+  </div>
+</main>

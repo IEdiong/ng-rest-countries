@@ -1,1 +1,20 @@
-<p>country works!</p>
+<article class="country-card">
+  <div class="card-image">
+    <img [src]="country.flag" alt="germany flag" loading="eager" />
+  </div>
+  <div class="card-body">
+    <h2 class="card-title">{{ country.name }}</h2>
+    <ul class="card-info">
+      <li>
+        Population:
+        <span class="font-light">{{ country.population | number }}</span>
+      </li>
+      <li>
+        Region: <span class="font-light">{{ country.region }}</span>
+      </li>
+      <li>
+        Capital: <span class="font-light">{{ country.capital }}</span>
+      </li>
+    </ul>
+  </div>
+</article>
