@@ -15,7 +15,19 @@ export class CountryListComponent implements OnInit {
   ngOnInit(): void {
     this.countryService.getCountries().subscribe((data) => {
       // console.log(data);
-      this.countries = data;
+      let favArr: any = [];
+
+      if (data) {
+        ['Germany', 'United States of America', 'Brazil', 'Iceland'].forEach(
+          (el) => {
+            let tempData = data.find((cty) => cty.name === el);
+            favArr.push(tempData);
+            data = data.filter((cty) => cty.name !== el);
+          }
+        );
+
+        this.countries = [...favArr, ...data];
+      }
     });
   }
 }
