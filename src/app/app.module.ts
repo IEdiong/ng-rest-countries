@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { CountriesModule } from './countries/countries.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { CountriesModule } from './countries/countries.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CountriesModule
+    CountriesModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
