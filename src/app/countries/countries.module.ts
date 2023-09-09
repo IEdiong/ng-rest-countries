@@ -7,11 +7,8 @@ import { CountriesComponent } from './countries.component';
 import { CountryListComponent } from './country-list/country-list.component';
 
 @NgModule({
-  declarations: [
-    CountryComponent,
-    CountriesComponent,
-    CountryListComponent
-  ],
+  declarations: [CountryComponent, CountriesComponent, CountryListComponent],
   imports: [CommonModule, CountriesRoutingModule],
+  exports: [CountriesComponent],
 })
 export class CountriesModule {}
