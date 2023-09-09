@@ -14,8 +14,19 @@
 }
 
 @layer components {
+  .header {
+    @apply w-full shadow-md;
+  }
+
+  .header > div {
+    @apply container mx-auto flex items-center justify-between py-6;
+  }
+
+  .header button {
+    @apply capitalize font-semibold inline-flex items-center gap-x-1;
+  }
   .country-card {
-    @apply w-full rounded-md overflow-hidden bg-white drop-shadow-md dark:bg-dark-blue lg:hover:cursor-pointer;
+    @apply w-full rounded-md overflow-hidden bg-white drop-shadow-md dark:bg-dark-blue lg:hover:cursor-pointer lg:hover:drop-shadow-2xl lg:focus-visible:drop-shadow-2xl lg:focus-visible:outline-none transition ease-in-out duration-300;
   }
 
   .card-image img {
