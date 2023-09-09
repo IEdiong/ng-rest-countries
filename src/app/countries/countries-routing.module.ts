@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CountryListComponent } from './country-list/country-list.component';
+import { CountryDetailComponent } from './country-detail/country-detail.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: '', component: CountryListComponent, pathMatch: 'full' },
+  { path: ':countryName', component: CountryDetailComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class CountriesRoutingModule { }
+export class CountriesRoutingModule {}

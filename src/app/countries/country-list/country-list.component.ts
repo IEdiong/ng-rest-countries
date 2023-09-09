@@ -14,7 +14,7 @@ export class CountryListComponent implements OnInit {
 
   ngOnInit(): void {
     this.countryService.getCountries().subscribe((data) => {
-      // console.log(data);
+      console.log(data);
       let favArr: any = [];
 
       if (data) {

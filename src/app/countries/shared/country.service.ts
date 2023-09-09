@@ -13,4 +13,11 @@ export class CountryService {
   getCountries() {
     return this.http.get<ICountry[]>(this.url);
   }
+
+  getCountry(name: string) {
+    // const url = `https://restcountries.com/v3.1/alpha/${cioc}`;
+    const url = `https://restcountries.com/v2/name/${name}?fullText=true`;
+
+    return this.http.get<ICountry[]>(url);
+  }
 }

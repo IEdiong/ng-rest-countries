@@ -2,10 +2,15 @@ export interface ICountry {
   name: string;
   capital: string;
   region: string;
+  subregion: string;
   population: number;
   flag: string;
   flags: ICountryFlags;
   borders: string[];
+  nativeName: string;
+  topLevelDomain: string[];
+  currencies: ICountryCurrency[];
+  languages: ICountryLanguage[];
 }
 
 interface ICountryFlags {
@@ -13,17 +18,12 @@ interface ICountryFlags {
   png: string;
 }
 
-/*
-const countryData = [
-  {
-    name: 'Germany',
-    capital: 'Berlin',
-    region: 'Europe',
-    population: 83240525,
-    flags: {
-      svg: 'https://flagcdn.com/de.svg',
-      png: 'https://flagcdn.com/w320/de.png',
-    },
-  },
-];
-*/
+interface ICountryCurrency {
+  code: string;
+  name: string;
+  symbol: string;
+}
+
+export interface ICountryLanguage {
+  name: string;
+}
