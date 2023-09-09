@@ -1,6 +1,6 @@
 <main class="mt-14">
   <div class="container mx-auto">
-    <button class="shadow-3xl px-8 py-2 rounded-md">
+    <button (click)="onBack()" class="shadow-3xl px-8 py-2 rounded-md">
       &larr; <span class="ml-2">Back</span>
     </button>
     <div>
@@ -8,17 +8,21 @@
         <div
           class="container mx-auto mt-5 flex flex-col md:flex-row justify-between items-start gap-36"
         >
+          <img *ngIf="loading" class="aspect-[4/3] w-2/5 skeleton" />
           <img
-            [src]="country.flags.svg"
+            *ngIf="!loading"
+            [src]="country.flag"
             alt="flag of ..."
             class="aspect-[4/3] w-2/5"
           />
           <div class="flex-1 py-10">
-            <h1 class="font-black text-2xl mb-10">
+            <div *ngIf="loading" class="skeleton h-12 w-64 mb-[40px]"></div>
+            <h1 *ngIf="!loading" class="font-black text-2xl mb-10">
               {{ country.name }}
             </h1>
 
-            <div class="flex justify-between">
+            <div *ngIf="loading" class="skeleton w-[624px] min-h-[152px]"></div>
+            <div *ngIf="!loading" class="flex justify-between">
               <ul class="flex flex-col gap-2">
                 <li>
                   <span class="font-semibold mr-2">Native Name:</span>

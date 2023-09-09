@@ -1,4 +1,4 @@
-<article class="country-card" tabindex="0">
+<a [routerLink]="[country.name]" class="country-card">
   <div class="card-image">
     <img [src]="country.flag" alt="germany flag" loading="eager" />
   </div>
@@ -17,4 +17,4 @@
       </li>
     </ul>
   </div>
-</article>
+</a>
