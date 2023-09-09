@@ -1,9 +1,18 @@
 <header class="header">
   <div>
     <h1 class="font-extrabold text-2xl">Where in the world?</h1>
-    <button>
-      <ng-icon name="ionMoonOutline" class="-mt-[2px]"></ng-icon>
-      dark mode
+    <button (click)="toggleTheme()">
+      <ng-icon
+        *ngIf="theme === 'light'"
+        name="ionMoonOutline"
+        class="-mt-[2px]"
+      ></ng-icon>
+      <ng-icon
+        *ngIf="theme === 'dark'"
+        name="ionSunny"
+        class="-mt-[2px]"
+      ></ng-icon>
+      {{ theme === "light" ? "dark" : "light" }} mode
     </button>
   </div>
 </header>
