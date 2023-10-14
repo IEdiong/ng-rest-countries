@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ICountry } from '../shared/country.model';
 
 @Component({
@@ -6,6 +6,13 @@ import { ICountry } from '../shared/country.model';
   templateUrl: './country.component.html',
   styles: [],
 })
-export class CountryComponent {
+export class CountryComponent implements OnInit {
   @Input() country!: ICountry;
+  loading: boolean = true;
+
+  ngOnInit(): void {
+    console.log('Loading country');
+
+    this.loading = false;
+  }
 }

@@ -1,4 +1,4 @@
-<a [routerLink]="[country.name]" class="country-card">
+<a [routerLink]="[country.name]" class="country-card" *ngIf="!loading">
   <div class="card-image">
     <img [src]="country.flag" alt="germany flag" loading="eager" />
   </div>
