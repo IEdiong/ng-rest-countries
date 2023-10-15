@@ -1,10 +1,15 @@
 <main class="py-8">
-  <div class="container">
-    <div *ngIf="isLoading" class="grid grid-cols-4 gap-x-[75px] gap-y-[73px]">
-      <div class="skeleton w-full h-96"></div>
+  <div *ngIf="countries$ | async as countries" class="container">
+    <div
+      *ngIf="countries.length === 0"
+      class="grid grid-cols-4 gap-x-[75px] gap-y-[73px]"
+    >
+      <div
+        *ngFor="let item of [1, 2, 3, 4, 5, 6, 7, 8]"
+        class="skeleton w-full h-96"
+      ></div>
     </div>
     <div
-      *ngIf="!isLoading"
       class="grid grid-cols-[repeat(auto-fill,_minmax(250px,_1fr))] gap-x-[75px] gap-y-[73px]"
     >
       <rc-country
