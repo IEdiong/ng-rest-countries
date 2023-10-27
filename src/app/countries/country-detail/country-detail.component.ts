@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -29,9 +28,8 @@ export class CountryDetailComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     const name: string = this.activatedRoute.snapshot.params['countryName'];
-    this.countryService.getCountry(name).subscribe((data) => {
-      // console.log(data[0]);
-      this.country = data[0];
+    this.countryService.singleCountry(name).subscribe((data) => {
+      this.country = data;
       this.languages = this.country.languages;
       this.loading = false;
     });

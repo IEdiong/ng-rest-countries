@@ -41,7 +41,7 @@ export class CountryListComponent implements OnInit {
   constructor(private countryService: CountryService) {}
 
   ngOnInit(): void {
-    this.countries$ = this.countryService.getCountries();
+    this.countries$ = this.countryService.countries$;
     this.isLoading = false;
   }
 }

@@ -9,7 +9,11 @@
   }
 
   body {
-    @apply bg-v-light-gray dark:bg-vd-dark-blue text-v-dark-blue dark:text-white;
+    @apply bg-v-light-gray dark:bg-vd-dark-blue text-v-dark-blue dark:text-white min-h-screen;
+  }
+
+  app-root {
+    @apply block min-h-screen;
   }
 }
 
@@ -19,7 +23,7 @@
   }
 
   .header > div {
-    @apply container mx-auto flex items-center justify-between py-6;
+    @apply container px-6 max-w-[1328px] flex items-center justify-between py-6;
   }
 
   .header button {

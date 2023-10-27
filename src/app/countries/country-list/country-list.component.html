@@ -1,5 +1,8 @@
 <main class="py-8">
-  <div *ngIf="countries$ | async as countries" class="container">
+  <div
+    *ngIf="countries$ | async as countries"
+    class="container px-6 max-w-[1328px]"
+  >
     <div
       *ngIf="countries.length === 0"
       class="grid grid-cols-4 gap-x-[75px] gap-y-[73px]"

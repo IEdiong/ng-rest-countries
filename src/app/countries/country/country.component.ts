@@ -11,7 +11,7 @@ export class CountryComponent implements OnInit {
   loading: boolean = true;
 
   ngOnInit(): void {
-    console.log('Loading country');
+    // console.log('Loading country');
 
     this.loading = false;
   }
