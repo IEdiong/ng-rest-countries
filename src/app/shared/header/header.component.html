@@ -6,11 +6,13 @@
         *ngIf="theme === 'light'"
         name="ionMoonOutline"
         class="-mt-[2px]"
+        aria-hidden="true"
       ></ng-icon>
       <ng-icon
         *ngIf="theme === 'dark'"
         name="ionSunny"
         class="-mt-[2px]"
+        aria-hidden="true"
       ></ng-icon>
       {{ theme === "light" ? "dark" : "light" }} mode
     </button>

@@ -1,22 +1,24 @@
-<main class="mt-14">
+<main class="pt-14">
   <div class="container px-6 max-w-[1328px]">
     <button (click)="onBack()" class="shadow-3xl px-8 py-2 rounded-md">
       &larr; <span class="ml-2">Back</span>
     </button>
 
     <section
-      class="mt-5 flex flex-col md:flex-row justify-between items-start gap-36"
+      class="mt-14 flex flex-col md:flex-row justify-between items-start gap-36 relative overflow-hidden"
     >
-      <img *ngIf="loading" class="aspect-[4/3] w-2/5 skeleton" />
-      <img
-        *ngIf="!loading"
-        [src]="country.flag"
-        alt="flag of ..."
-        class="aspect-[4/3] w-2/5"
-      />
+      <div class="h-[400px] w-[558px]">
+        <div *ngIf="loading" class="skeleton"></div>
+        <img
+          *ngIf="!loading"
+          [src]="country.flag"
+          alt="flag of ..."
+          class="w-full h-full"
+        />
+      </div>
       <div class="flex-1 py-10">
         <div *ngIf="loading" class="skeleton h-12 w-64 mb-[40px]"></div>
-        <h1 *ngIf="!loading" class="font-black text-2xl mb-10">
+        <h1 *ngIf="!loading" class="font-black text-3xl mb-10">
           {{ country.name }}
         </h1>
 
@@ -24,53 +26,55 @@
         <div *ngIf="!loading" class="flex justify-between">
           <ul class="flex flex-col gap-2">
             <li>
-              <span class="font-semibold mr-2">Native Name:</span>
+              <span class="font-semibold mr-1">Native Name:</span>
               {{ country.nativeName }}
             </li>
             <li>
-              <span class="font-semibold mr-2">Population:</span>
+              <span class="font-semibold mr-1">Population:</span>
               {{ country.population | number }}
             </li>
             <li>
-              <span class="font-semibold mr-2">Region:</span>
+              <span class="font-semibold mr-1">Region:</span>
               {{ country.region }}
             </li>
             <li>
-              <span class="font-semibold mr-2">Sub Region:</span>
+              <span class="font-semibold mr-1">Sub Region:</span>
               {{ country.subregion }}
             </li>
             <li>
-              <span class="font-semibold mr-2">Capital:</span>
+              <span class="font-semibold mr-1">Capital:</span>
               {{ country.capital }}
             </li>
           </ul>
           <ul class="flex flex-col gap-2">
             <li>
-              <span class="font-semibold mr-2">Top Level Domain:</span>
+              <span class="font-semibold mr-1">Top Level Domain:</span>
               {{ country.topLevelDomain[0] }}
             </li>
             <li>
-              <span class="font-semibold mr-2">Currencies:</span>
+              <span class="font-semibold mr-1">Currencies:</span>
               {{ country.currencies[0].name }}
             </li>
             <li>
-              <span class="font-semibold mr-2">Languages:</span>
-              <span *ngFor="let lang of languages">
-                {{ lang.name }}
-              </span>
+              <span class="font-semibold mr-1">Languages:</span>
+              {{ languages }}
             </li>
           </ul>
         </div>
 
-        <!-- <p class="mt-10">
-              <span class="font-semibold mr-2">Border Countries:</span>
-              {{borderCountries().map((cou, id) => (
-                <Link to={`/${cou}`} class='shadow-md px-6 py-2 rounded-md' key={id}>
-                  {cou}
-                </Link>
-              ))}}
-            </p> -->
+        <p class="mt-20">
+          <span class="font-semibold mr-1">Border Countries:</span>
+          <a
+            href=""
+            *ngFor="let item of country?.borders"
+            class="shadow-md px-6 py-2 rounded-md"
+          >
+            {{ item }}
+          </a>
+        </p>
       </div>
     </section>
   </div>
 </main>
+
+<!-- class='shadow-md px-6 py-2 rounded-md' -->

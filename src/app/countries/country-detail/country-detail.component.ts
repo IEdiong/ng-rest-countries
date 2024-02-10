@@ -12,7 +12,7 @@ import { ICountry, ICountryLanguage } from '../shared/country.model';
 })
 export class CountryDetailComponent implements OnInit {
   country!: ICountry;
-  languages!: ICountryLanguage[];
+  languages!: string;
   loading: boolean = false;
 
   constructor(
@@ -29,8 +29,10 @@ export class CountryDetailComponent implements OnInit {
     this.loading = true;
     const name: string = this.activatedRoute.snapshot.params['countryName'];
     this.countryService.singleCountry(name).subscribe((data) => {
+      // Set country object
       this.country = data;
-      this.languages = this.country.languages;
+      // Set languages string
+      this.languages = data.languages.map((obj) => obj.name).join(', ');
       this.loading = false;
     });
   }

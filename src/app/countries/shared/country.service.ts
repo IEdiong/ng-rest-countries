@@ -41,8 +41,8 @@ export class CountryService {
     const url = `https://restcountries.com/v2/name/${name}?fullText=true`;
 
     return this.http.get<ICountry[]>(url).pipe(
-      map((res) => res[0])
-      // tap((data) => console.log('Single country', data))
+      map((res) => res[0]),
+      tap((data) => console.log('Single country', data))
     );
   }
 
