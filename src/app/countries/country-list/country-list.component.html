@@ -1,24 +1,23 @@
 <main class="py-8">
   <div
-    *ngIf="countries$ | async as countries"
-    class="container px-6 max-w-[1328px]"
+    *ngIf="countries$ | async as countries; else loading"
+    class="country-list-container"
   >
-    <div
-      *ngIf="countries.length === 0"
-      class="grid grid-cols-4 gap-x-[75px] gap-y-[73px]"
-    >
-      <div
-        *ngFor="let item of [1, 2, 3, 4, 5, 6, 7, 8]"
-        class="skeleton w-full h-96"
-      ></div>
-    </div>
-    <div
-      class="grid grid-cols-[repeat(auto-fill,_minmax(250px,_1fr))] gap-x-[75px] gap-y-[73px]"
-    >
+    <div class="country-list-grid">
       <rc-country
         *ngFor="let country of countries"
         [country]="country"
       ></rc-country>
     </div>
   </div>
+  <ng-template #loading>
+    <div class="country-list-container">
+      <div class="country-list-grid">
+        <div
+          *ngFor="let item of [1, 2, 3, 4, 5, 6, 7, 8]"
+          class="skeleton"
+        ></div>
+      </div>
+    </div>
+  </ng-template>
 </main>
