@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ICountry } from '../shared/country.model';
 import { CountryService } from '../shared/country.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'rc-country-list',
@@ -9,7 +9,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./country-list.component.scss'],
 })
 export class CountryListComponent implements OnInit {
-  countries$: Observable<ICountry[]> | undefined;
+  currentPage$ = new BehaviorSubject(1);
+  currentPageData$: Observable<ICountry[]> | undefined;
 
   // TODO: 1. Handle error from observable
   // TODO: 2. Implement pagination or infinite scrolling
@@ -17,6 +18,14 @@ export class CountryListComponent implements OnInit {
   constructor(private countryService: CountryService) {}
 
   ngOnInit(): void {
-    this.countries$ = this.countryService.countries$;
+    this.currentPageData$ = this.currentPage$.pipe(
+      switchMap((currentPage: number) =>
+        this.countryService.getAllCountries(currentPage)
+      )
+    );
+  }
+
+  onScroll() {
+    this.currentPage$.next(this.currentPage$.value + 1);
   }
 }

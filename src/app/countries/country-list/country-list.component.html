@@ -1,6 +1,6 @@
 <main class="py-8">
   <div
-    *ngIf="countries$ | async as countries; else loading"
+    *ngIf="currentPageData$ | async as countries; else loading"
     class="country-list-container"
   >
     <div class="country-list-grid">
@@ -8,6 +8,15 @@
         *ngFor="let country of countries"
         [country]="country"
       ></rc-country>
+      <div
+        class="mt-10 bg-slate-700 text-yellow-50 w-full h-6"
+        infiniteScroll
+        [infiniteScrollDistance]="1"
+        [infiniteScrollThrottle]="500"
+        (scrolled)="onScroll()"
+      >
+        loading more countries...
+      </div>
     </div>
   </div>
   <ng-template #loading>

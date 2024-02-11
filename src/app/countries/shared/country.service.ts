@@ -5,7 +5,15 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { ICountry } from './country.model';
-import { catchError, map, tap, throwError } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  map,
+  of,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { CACHING_ENABLED } from 'src/app/core/interceptors/cache.interceptor';
 
 @Injectable({
@@ -13,13 +21,14 @@ import { CACHING_ENABLED } from 'src/app/core/interceptors/cache.interceptor';
 })
 export class CountryService {
   private allCountriesUrl = 'https://restcountries.com/v2/all';
+  private pageSize = 16;
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Observable of all countries
+   * A private state Observable of all countries
    */
-  countries$ = this.http
+  private countries$ = this.http
     .get<ICountry[]>(this.allCountriesUrl, {
       context: new HttpContext().set(CACHING_ENABLED, true),
     })
@@ -28,6 +37,23 @@ export class CountryService {
       tap((data) => console.log(data)),
       catchError(this.handleError)
     );
+
+  /**
+   * Get countries for infinite scrolling
+   * @param page number of pages to display
+   * @returns an Observable of `ICountry[]` instances
+   */
+  getAllCountries(page: number): Observable<ICountry[]> {
+    return this.countries$.pipe(
+      switchMap((countries: ICountry[]) => {
+        const startIndex = (page - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        const paginatedCountries = countries.slice(0, endIndex);
+
+        return of(paginatedCountries);
+      })
+    );
+  }
 
   /**
    * Observable of a single country

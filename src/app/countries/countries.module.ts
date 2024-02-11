@@ -8,6 +8,8 @@ import { CountryListComponent } from './country-list/country-list.component';
 import { CountryDetailComponent } from './country-detail/country-detail.component';
 import { SharedModule } from '../shared/shared.module';
 
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
 @NgModule({
   declarations: [
     CountryComponent,
@@ -15,7 +17,12 @@ import { SharedModule } from '../shared/shared.module';
     CountryListComponent,
     CountryDetailComponent,
   ],
-  imports: [CommonModule, CountriesRoutingModule, SharedModule],
+  imports: [
+    CommonModule,
+    CountriesRoutingModule,
+    SharedModule,
+    InfiniteScrollModule,
+  ],
   exports: [CountriesComponent],
 })
 export class CountriesModule {}
