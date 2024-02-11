@@ -11,7 +11,8 @@ import { Observable } from 'rxjs';
 export class CountryListComponent implements OnInit {
   countries$: Observable<ICountry[]> | undefined;
 
-  // TODO: Handle error from observable
+  // TODO: 1. Handle error from observable
+  // TODO: 2. Implement pagination or infinite scrolling
 
   constructor(private countryService: CountryService) {}
 

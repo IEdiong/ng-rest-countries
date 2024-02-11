@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CountriesModule } from './countries/countries.module';
 import { SharedModule } from './shared/shared.module';
+import { CacheInterceptor } from './core/interceptors/cache.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +17,9 @@ import { SharedModule } from './shared/shared.module';
     CountriesModule,
     SharedModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

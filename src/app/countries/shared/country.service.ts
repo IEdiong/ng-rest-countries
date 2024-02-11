@@ -1,36 +1,33 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ICountry } from './country.model';
 import {
-  Observable,
-  Subject,
-  catchError,
-  map,
-  shareReplay,
-  tap,
-  throwError,
-} from 'rxjs';
+  HttpClient,
+  HttpContext,
+  HttpErrorResponse,
+} from '@angular/common/http';
+import { ICountry } from './country.model';
+import { catchError, map, tap, throwError } from 'rxjs';
+import { CACHING_ENABLED } from 'src/app/core/interceptors/cache.interceptor';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CountryService {
   private allCountriesUrl = 'https://restcountries.com/v2/all';
-  // private countries = new Subject<ICountry[]>();
-  // countries$ = this.countries.asObservable();
 
   constructor(private http: HttpClient) {}
 
   /**
    * Observable of all countries
    */
-  countries$ = this.http.get<ICountry[]>(this.allCountriesUrl).pipe(
-    map((data) => this.sortCountries(data)),
-    tap((data) => console.log(data)),
-    shareReplay(1),
-    tap(() => console.log('After shareReplay')),
-    catchError(this.handleError)
-  );
+  countries$ = this.http
+    .get<ICountry[]>(this.allCountriesUrl, {
+      context: new HttpContext().set(CACHING_ENABLED, true),
+    })
+    .pipe(
+      map((data) => this.sortCountries(data)),
+      tap((data) => console.log(data)),
+      catchError(this.handleError)
+    );
 
   /**
    * Observable of a single country
@@ -40,10 +37,14 @@ export class CountryService {
   singleCountry(name: string) {
     const url = `https://restcountries.com/v2/name/${name}?fullText=true`;
 
-    return this.http.get<ICountry[]>(url).pipe(
-      map((res) => res[0]),
-      tap((data) => console.log('Single country', data))
-    );
+    return this.http
+      .get<ICountry[]>(url, {
+        context: new HttpContext().set(CACHING_ENABLED, true),
+      })
+      .pipe(
+        map((res) => res[0]),
+        tap((data) => console.log('Single country', data))
+      );
   }
 
   private handleError(error: HttpErrorResponse) {
