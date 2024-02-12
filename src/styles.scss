@@ -19,7 +19,7 @@
 
 @layer components {
   .header {
-    @apply w-full shadow-md bg-white dark:bg-dark-blue;
+    @apply w-full shadow-nav bg-white dark:bg-dark-blue;
   }
 
   .header > div {

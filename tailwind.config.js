@@ -16,6 +16,7 @@ module.exports = {
         "vd-dark-blue": "hsl(207, 26%, 17%)", // Dark Mode Background
       },
       boxShadow: {
+        nav: "0px 2px 4px 0px rgba(0, 0, 0, 0.06)",
         "3xl": "0px 1px 8px 0px rgba( 0, 0, 0, 0.75)",
         "4xl": "0px 1px 10px 0px rgba( 0, 0, 0, 0.75)",
       },
