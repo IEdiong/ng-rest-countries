@@ -13,7 +13,6 @@ export class CountryListComponent implements OnInit {
   currentPageData$: Observable<ICountry[]> | undefined;
 
   // TODO: 1. Handle error from observable
-  // TODO: 2. Implement pagination or infinite scrolling
 
   constructor(private countryService: CountryService) {}
 

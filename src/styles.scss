@@ -38,21 +38,21 @@
     @apply grid grid-cols-[repeat(auto-fill,_minmax(250px,_1fr))] gap-x-[75px] gap-y-[73px];
   }
   .country-card {
-    @apply block w-full min-w-[250px] rounded-md overflow-hidden bg-white drop-shadow-md dark:bg-dark-blue lg:hover:cursor-pointer lg:hover:drop-shadow-2xl lg:dark:hover:bg-lighter-blue lg:focus-visible:drop-shadow-2xl lg:focus-visible:outline-none transition ease-in-out duration-300;
+    @apply block w-full min-w-[264px] rounded-md overflow-hidden bg-white drop-shadow-md dark:bg-dark-blue lg:hover:cursor-pointer lg:hover:drop-shadow-2xl lg:dark:hover:bg-lighter-blue lg:focus-visible:drop-shadow-2xl lg:focus-visible:outline-none transition ease-in-out duration-300;
   }
 
   .card-image img {
-    @apply max-w-full aspect-[5/3] object-cover;
+    @apply max-w-full aspect-[5/3] object-cover h-[160px];
   }
 
   .card-body {
-    @apply px-6 pt-[30px] pb-12 flex flex-col justify-between gap-y-4;
+    @apply px-[26px] pt-6 pb-[46px] flex flex-col justify-between gap-y-4;
   }
   .card-title {
-    @apply font-extrabold;
+    @apply font-extrabold leading-[26px];
   }
 
   .card-info {
-    @apply font-semibold;
+    @apply font-semibold text-sm leading-4;
   }
 }
