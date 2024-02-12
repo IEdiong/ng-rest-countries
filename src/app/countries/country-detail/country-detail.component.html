@@ -1,14 +1,15 @@
-<main class="pt-14">
+<main class="pt-20">
   <div class="container px-6 max-w-[1328px]">
-    <button (click)="onBack()" class="shadow-3xl px-8 py-2 rounded-md">
+    <button (click)="onBack()" class="shadow-back px-8 py-2 rounded-md">
       &larr; <span class="ml-2">Back</span>
     </button>
 
     <section
-      class="mt-14 flex flex-col md:flex-row justify-between items-start gap-36 relative overflow-hidden"
+      class="mt-20 flex flex-col md:flex-row items-start gap-x-[120px] relative overflow-hidden"
     >
-      <div class="h-[400px] w-[558px]">
-        <div *ngIf="loading" class="skeleton"></div>
+      <div
+        class="h-[401px] w-[560px] rounded-[10px] overflow-hidden shadow-flag"
+      >
         <img
           *ngIf="!loading"
           [src]="country.flag"
@@ -16,65 +17,63 @@
           class="w-full h-full"
         />
       </div>
-      <div class="flex-1 py-10">
-        <div *ngIf="loading" class="skeleton h-12 w-64 mb-[40px]"></div>
-        <h1 *ngIf="!loading" class="font-black text-3xl mb-10">
+      <div class="flex-1 py-[39px]">
+        <h1 class="font-extrabold text-[32px] leading-[44px]">
           {{ country.name }}
         </h1>
 
-        <div *ngIf="loading" class="skeleton w-[624px] min-h-[152px]"></div>
-        <div *ngIf="!loading" class="flex justify-between">
+        <div class="flex gap-[141px] mt-[23px]">
           <ul class="flex flex-col gap-2">
-            <li>
-              <span class="font-semibold mr-1">Native Name:</span>
+            <li class="font-light">
+              <span class="font-semibold">Native Name:</span>
               {{ country.nativeName }}
             </li>
-            <li>
-              <span class="font-semibold mr-1">Population:</span>
+            <li class="font-light">
+              <span class="font-semibold">Population:</span>
               {{ country.population | number }}
             </li>
-            <li>
-              <span class="font-semibold mr-1">Region:</span>
+            <li class="font-light">
+              <span class="font-semibold">Region:</span>
               {{ country.region }}
             </li>
-            <li>
-              <span class="font-semibold mr-1">Sub Region:</span>
+            <li class="font-light">
+              <span class="font-semibold">Sub Region:</span>
               {{ country.subregion }}
             </li>
-            <li>
-              <span class="font-semibold mr-1">Capital:</span>
+            <li class="font-light">
+              <span class="font-semibold">Capital:</span>
               {{ country.capital }}
             </li>
           </ul>
           <ul class="flex flex-col gap-2">
-            <li>
-              <span class="font-semibold mr-1">Top Level Domain:</span>
+            <li class="font-light">
+              <span class="font-semibold">Top Level Domain:</span>
               {{ country.topLevelDomain[0] }}
             </li>
-            <li>
-              <span class="font-semibold mr-1">Currencies:</span>
+            <li class="font-light">
+              <span class="font-semibold">Currencies:</span>
               {{ country.currencies[0].name }}
             </li>
-            <li>
-              <span class="font-semibold mr-1">Languages:</span>
+            <li class="font-light">
+              <span class="font-semibold">Languages:</span>
               {{ languages }}
             </li>
           </ul>
         </div>
 
-        <p class="mt-20">
-          <span class="font-semibold mr-1">Border Countries:</span>
-          <a
-            href=""
-            *ngFor="let item of country?.borders"
-            class="shadow-md px-6 py-2 rounded-md"
-          >
-            {{ item }}
-          </a>
-        </p>
+        <div class="mt-[68px] flex items-start gap-x-4">
+          <p class="font-semibold mt-1">Border Countries:</p>
+          <div class="flex gap-x-[10px] flex-wrap">
+            <a
+              href=""
+              *ngFor="let item of country?.borders"
+              class="shadow-tag px-[10px] rounded-sm w-24 h-7 flex items-center justify-center text-sm font-light"
+            >
+              {{ item }}
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   </div>
 </main>
-
-<!-- class='shadow-md px-6 py-2 rounded-md' -->
