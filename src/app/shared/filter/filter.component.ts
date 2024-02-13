@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FilterComponent implements OnInit {
   regions: string[] = [];
-  menuIsOpen: boolean = true;
+  menuIsOpen: boolean = false;
 
   ngOnInit(): void {
     this.regions = ['Africa', 'America', 'Asia', 'Europe', 'Oceania'];

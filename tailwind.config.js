@@ -12,7 +12,7 @@ module.exports = {
 
         // dark mode
         "lighter-blue": "hsl(212, 25%, 24%)", // Dark Mode Elements Hover
-        "dark-blue": "hsl(209, 23%, 22%)", // Dark Mode Elements
+        "dark-blue": "hsl(209, 23%, 22%)", //? Dark Mode Elements (#2B3844)
         "vd-dark-blue": "hsl(207, 26%, 17%)", // Dark Mode Background
       },
       boxShadow: {

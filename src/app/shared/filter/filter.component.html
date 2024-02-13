@@ -2,16 +2,16 @@
   <button
     (click)="toggleMenu()"
     type="button"
-    class="inline-flex justify-between items-center h-14 w-[200px] rounded-[5px] shadow-filter ps-6 pe-[22px] py-[18px] bg-white hover:bg-gray-50"
+    class="inline-flex justify-between items-center h-14 w-[200px] rounded-[5px] shadow-filter ps-6 pe-[22px] py-[18px] bg-white hover:bg-gray-50 dark:bg-dark-blue"
     id="filter-button"
     aria-haspopup="true"
     aria-expanded="false"
     aria-controls="menu-content"
   >
-    <span class="text-sm font-normal text-v-dark-blue">Filter by Region</span>
+    <span class="text-sm font-normal">Filter by Region</span>
 
     <svg
-      class="h-3 w-3"
+      class="h-3 w-3 fill-black dark:fill-white"
       xmlns="http://www.w3.org/2000/svg"
       width="12"
       height="12"
@@ -23,17 +23,17 @@
         fill-rule="evenodd"
         clip-rule="evenodd"
         d="M9.45 3.45L6 6.9L2.55 3.45L1.5 4.5L6 9L10.5 4.5L9.45 3.45Z"
-        fill="black"
+        fill="current-color"
       />
     </svg>
   </button>
 
   <ul
     *ngIf="menuIsOpen"
-    class="absolute -right-[0.5px] top-14 mt-1 w-[200px] rounded-[5px] shadow-filter bg-white h-[164px] transition-opacity ease-out duration-1000 origin-top"
+    class="absolute -right-[0.5px] top-14 mt-1 w-[200px] rounded-[5px] shadow-filter bg-white h-[164px] transition-opacity ease-out duration-1000 origin-top dark:bg-dark-blue"
     [ngClass]="
       menuIsOpen
-        ? ' transform z-10 opacity-100 h-full'
+        ? ' transform z-10 opacity-100 h-[164px]'
         : 'origin-top z-0 overflow-hidden h-0'
     "
     id="menu-content"
@@ -46,7 +46,7 @@
     <div class="py-4 flex flex-col justify-between h-full" role="none">
       <li role="presentation" class="flex-1" *ngFor="let region of regions">
         <button
-          class="block px-6 h-full text-sm font-normal transition-all ease-in-out w-full text-left hover:bg-gray-100 hover:text-gray-900 hover:pl-8"
+          class="block px-6 h-full text-sm font-normal transition-all ease-in-out w-full text-left hover:bg-gray-100 hover:text-gray-900 hover:pl-8 dark:hover:text-white dark:hover:bg-lighter-blue"
           role="menuitem"
           tabIndex="-1"
           id="menu-item-0"
