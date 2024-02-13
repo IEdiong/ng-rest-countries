@@ -7,7 +7,7 @@ module.exports = {
       colors: {
         // light mode
         "v-dark-blue": "hsl(200, 15%, 8%)", //? Light Mode Text (#111517)
-        "dark-gray": "hsl(0, 0%, 52%)", // Light Mode Input
+        "dark-gray": "hsl(0, 0%, 52%)", //? Light Mode Input (#848484)
         "v-light-gray": "hsl(0, 0%, 98%)", // Light Mode Background
 
         // dark mode
