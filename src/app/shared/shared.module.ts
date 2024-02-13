@@ -6,13 +6,29 @@ import { ionMoonOutline, ionSunny } from '@ng-icons/ionicons';
 
 import { HeaderComponent } from './header/header.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { SearchbarComponent } from './searchbar/searchbar.component';
+import { FilterComponent } from './filter/filter.component';
 
 @NgModule({
-  declarations: [HeaderComponent, SkeletonComponent],
+  declarations: [
+    HeaderComponent,
+    SkeletonComponent,
+    ToolbarComponent,
+    SearchbarComponent,
+    FilterComponent,
+  ],
   imports: [
     CommonModule,
     NgIconsModule.withIcons({ ionMoonOutline, ionSunny }),
   ],
-  exports: [CommonModule, HeaderComponent, SkeletonComponent],
+  exports: [
+    CommonModule,
+    HeaderComponent,
+    SkeletonComponent,
+    ToolbarComponent,
+    SearchbarComponent,
+    FilterComponent,
+  ],
 })
 export class SharedModule {}

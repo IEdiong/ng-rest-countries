@@ -1,4 +1,5 @@
-<main class="py-8">
+<main>
+  <rc-toolbar></rc-toolbar>
   <div
     *ngIf="currentPageData$ | async as countries; else loading"
     class="country-list-container"

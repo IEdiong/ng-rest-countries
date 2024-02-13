@@ -38,7 +38,7 @@
     @apply grid grid-cols-[repeat(auto-fill,_minmax(250px,_1fr))] gap-x-[75px] gap-y-[73px];
   }
   .country-card {
-    @apply block w-full min-w-[264px] rounded-md overflow-hidden bg-white drop-shadow-md dark:bg-dark-blue lg:hover:cursor-pointer lg:hover:drop-shadow-2xl lg:dark:hover:bg-lighter-blue lg:focus-visible:drop-shadow-2xl lg:focus-visible:outline-none transition ease-in-out duration-300;
+    @apply block w-full min-w-[264px] rounded-[5px] overflow-hidden bg-white shadow-card dark:bg-dark-blue lg:hover:cursor-pointer lg:hover:drop-shadow-2xl lg:dark:hover:bg-lighter-blue lg:focus-visible:drop-shadow-2xl lg:focus-visible:outline-none transition ease-in-out duration-300;
   }
 
   .card-image img {
