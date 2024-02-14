@@ -1,5 +1,5 @@
 <main>
-  <rc-toolbar></rc-toolbar>
+  <rc-toolbar (regionSelected)="onRegionSelectionChanged($event)"></rc-toolbar>
   <div
     *ngIf="currentPageData$ | async as countries; else loading"
     class="country-list-container"
@@ -10,18 +10,15 @@
         [country]="country"
       ></rc-country>
       <div
-        class="mt-10 bg-slate-700 text-yellow-50 w-full h-6"
         infiniteScroll
         [infiniteScrollDistance]="1"
         [infiniteScrollThrottle]="500"
         (scrolled)="onScroll()"
-      >
-        loading more countries...
-      </div>
+      ></div>
     </div>
   </div>
   <ng-template #loading>
-    <div class="country-list-container">
+    <div class="country-list-container pb-10">
       <div class="country-list-grid">
         <div
           *ngFor="let item of [1, 2, 3, 4, 5, 6, 7, 8]"

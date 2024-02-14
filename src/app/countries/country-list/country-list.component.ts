@@ -1,30 +1,62 @@
-import { Component, OnInit } from '@angular/core';
-import { ICountry } from '../shared/country.model';
+import { Component } from '@angular/core';
 import { CountryService } from '../shared/country.service';
-import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  EMPTY,
+  Subject,
+  catchError,
+  combineLatest,
+  map,
+} from 'rxjs';
 
 @Component({
   selector: 'rc-country-list',
   templateUrl: './country-list.component.html',
   styleUrls: ['./country-list.component.scss'],
 })
-export class CountryListComponent implements OnInit {
-  currentPage$ = new BehaviorSubject(1);
-  currentPageData$: Observable<ICountry[]> | undefined;
+export class CountryListComponent {
+  pageSize = 16;
+  errMessage = '';
 
-  // TODO: 1. Handle error from observable
+  private currentPageSubject = new BehaviorSubject(1);
+  currentPageAction$ = this.currentPageSubject.asObservable();
+  private selectedRegionSubject = new BehaviorSubject('all');
+  selectedRegionAction$ = this.selectedRegionSubject.asObservable();
+
+  countriesByRegion$ = combineLatest([
+    this.countryService.allCountries$,
+    this.selectedRegionAction$,
+  ]).pipe(
+    map(([countries, region]) => {
+      if (region === 'all') return countries;
+      return countries.filter(
+        (country) => country.region.toLowerCase() === region
+      );
+    }),
+    catchError((err) => {
+      this.errMessage = err;
+      return EMPTY;
+    })
+  );
+
+  currentPageData$ = combineLatest([
+    this.countriesByRegion$,
+    this.currentPageAction$,
+  ]).pipe(
+    map(([countries, page]) => countries.slice(0, page * this.pageSize)),
+    catchError((err) => {
+      this.errMessage = err;
+      return EMPTY;
+    })
+  );
 
   constructor(private countryService: CountryService) {}
 
-  ngOnInit(): void {
-    this.currentPageData$ = this.currentPage$.pipe(
-      switchMap((currentPage: number) =>
-        this.countryService.getAllCountries(currentPage)
-      )
-    );
+  onScroll() {
+    this.currentPageSubject.next(this.currentPageSubject.value + 1);
   }
 
-  onScroll() {
-    this.currentPage$.next(this.currentPage$.value + 1);
+  onRegionSelectionChanged(region: string) {
+    this.selectedRegionSubject.next(region);
   }
 }

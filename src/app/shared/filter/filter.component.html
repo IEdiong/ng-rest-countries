@@ -46,6 +46,7 @@
     <div class="py-4 flex flex-col justify-between h-full" role="none">
       <li role="presentation" class="flex-1" *ngFor="let region of regions">
         <button
+          (click)="onRegionSelected($event)"
           class="block px-6 h-full text-sm font-normal transition-all ease-in-out w-full text-left hover:bg-gray-100 hover:text-gray-900 hover:pl-8 dark:hover:text-white dark:hover:bg-lighter-blue"
           role="menuitem"
           tabIndex="-1"
