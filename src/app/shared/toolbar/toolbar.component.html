@@ -1,6 +1,6 @@
 <div class="country-list-container py-12">
   <div class="flex justify-between items-center relative">
-    <rc-searchbar></rc-searchbar>
+    <rc-searchbar [searchControl]="searchForm"></rc-searchbar>
     <rc-filter (regionSelected)="selectRegion($event)"></rc-filter>
   </div>
 </div>

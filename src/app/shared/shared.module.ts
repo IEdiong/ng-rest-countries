@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { NgIconsModule } from '@ng-icons/core';
 import { ionMoonOutline, ionSunny } from '@ng-icons/ionicons';
@@ -20,6 +21,7 @@ import { FilterComponent } from './filter/filter.component';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     NgIconsModule.withIcons({ ionMoonOutline, ionSunny }),
   ],
   exports: [

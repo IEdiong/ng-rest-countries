@@ -9,6 +9,7 @@ import { CountryDetailComponent } from './country-detail/country-detail.componen
 import { SharedModule } from '../shared/shared.module';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
   imports: [
     CommonModule,
     CountriesRoutingModule,
+    ReactiveFormsModule,
     SharedModule,
     InfiniteScrollModule,
   ],

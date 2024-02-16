@@ -1,7 +1,10 @@
 <main>
-  <rc-toolbar (regionSelected)="onRegionSelectionChanged($event)"></rc-toolbar>
+  <rc-toolbar
+    (regionSelected)="onRegionSelectionChanged($event)"
+    [searchForm]="searchFormControl"
+  ></rc-toolbar>
   <div
-    *ngIf="currentPageData$ | async as countries; else loading"
+    *ngIf="finalPageData$ | async as countries; else loading"
     class="country-list-container"
   >
     <div class="country-list-grid">

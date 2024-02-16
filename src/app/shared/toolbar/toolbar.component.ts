@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'rc-toolbar',
@@ -6,6 +7,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styles: [],
 })
 export class ToolbarComponent {
+  @Input() searchForm!: FormControl;
   @Output() regionSelected = new EventEmitter<string>();
 
   selectRegion(region: string) {
