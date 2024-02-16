@@ -71,9 +71,21 @@ export class CountryListComponent implements OnInit {
     )
   );
 
-  finalPageData$ = merge(this.currentPageData$, this.searchedCountries$).pipe(
-    distinctUntilChanged()
+  paginatedSearchCountries$ = combineLatest([
+    this.searchedCountries$,
+    this.currentPageAction$,
+  ]).pipe(
+    map(([countries, page]) => countries.slice(0, page * this.pageSize)),
+    catchError((err) => {
+      this.errMessage = err;
+      return EMPTY;
+    })
   );
+
+  finalPageData$ = merge(
+    this.currentPageData$,
+    this.paginatedSearchCountries$
+  ).pipe(distinctUntilChanged());
 
   constructor(private countryService: CountryService) {}
 
