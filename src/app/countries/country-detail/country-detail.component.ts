@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 
 import { CountryService } from '../shared/country.service';
 import { ICountry, ICountryLanguage } from '../shared/country.model';
-import { Observable, tap } from 'rxjs';
+import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'rc-country-detail',
@@ -26,26 +26,17 @@ export class CountryDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const name: string = this.activatedRoute.snapshot.params['countryName'];
-    this.countryDetail$ = this.countryService
-      .singleCountry(name)
-      .pipe(
-        tap(
-          (country) =>
-            (this.languages = country.languages
-              .map((lang) => lang.name)
-              .join(', '))
-        )
-      );
+    this.countryDetail$ = this.activatedRoute.params.pipe(
+      map((param) => param['countryCode']),
+      switchMap((countryCode) =>
+        this.countryService.singleCountry(countryCode)
+      ),
+      tap(
+        (country) =>
+          (this.languages = country.languages
+            .map((lang) => lang.name)
+            .join(', '))
+      )
+    );
   }
 }
-
-/* .subscribe((data) => {
-  // Set country object
-  this.country = data;
-  // Set languages string
-  this.languages = data.languages.map((obj) => obj.name).join(', ');
-  this.loading = false;
-}); */
-
-// TODO: 1. Get the route parameters as an Observable

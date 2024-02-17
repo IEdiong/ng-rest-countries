@@ -30,15 +30,16 @@ export class CountryService {
    * @param name Name of the country
    * @returns An Observable of a single country
    */
-  singleCountry(name: string) {
-    const url = `https://restcountries.com/v2/name/${name}?fullText=true`;
+  singleCountry(alpha: string) {
+    // const url = `https://restcountries.com/v2/name/${name}?fullText=true`;
+    const url = `https://restcountries.com/v2/alpha/${alpha}`;
 
     return this.http
-      .get<ICountry[]>(url, {
+      .get<ICountry>(url, {
         context: new HttpContext().set(CACHING_ENABLED, true),
       })
       .pipe(
-        map((res) => res[0]),
+        // map((res) => res[0]),
         tap((data) => console.log('Single country', data))
       );
   }
