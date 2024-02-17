@@ -32,7 +32,7 @@
   }
 
   .country-list-container {
-    @apply container px-6 max-w-[1328px];
+    @apply container sm:px-6 max-w-[1328px];
   }
 
   .country-list-grid {
