@@ -1,15 +1,15 @@
-<main class="pt-20">
-  <div class="container px-6 max-w-[1328px]">
+<main class="py-10 lg:py-20">
+  <div class="container px-7 lg:px-6 max-w-[1328px]">
     <button (click)="onBack()" class="shadow-back px-8 py-2 rounded-md">
       &larr; <span class="ml-2">Back</span>
     </button>
 
     <section
       *ngIf="countryDetail$ | async as country; else loading"
-      class="mt-20 flex flex-col md:flex-row items-start gap-x-[120px] relative overflow-hidden"
+      class="mt-16 lg:mt-20 flex flex-col lg:flex-row items-start lg:justify-between lg:gap-x-8 relative overflow-hidden"
     >
       <div
-        class="h-[401px] w-[560px] rounded-[10px] overflow-hidden shadow-flag relative"
+        class="flex-1 max-w-[560px] rounded-[10px] overflow-hidden shadow-flag relative aspect-[560/401]"
       >
         <img
           [src]="country.flag"
@@ -17,13 +17,17 @@
           class="w-full h-full object-cover"
         />
       </div>
-      <div class="flex-1 py-[39px]">
-        <h1 class="font-extrabold text-[32px] leading-[44px]">
+      <div class="flex-1 max-w-[600px] py-11 lg:py-[39px]">
+        <h1
+          class="font-extrabold text-[22px] md:text-[32px] leading-[30px] md:leading-[44px]"
+        >
           {{ country.name }}
         </h1>
 
-        <div class="flex gap-[141px] mt-[23px]">
-          <ul class="flex flex-col gap-2">
+        <div
+          class="flex flex-col md:flex-row gap-x-3 gap-y-8 justify-between mt-4 lg:mt-[23px] max-w-[510px] text-sm md:text-base"
+        >
+          <ul class="flex flex-col gap-2 shrink-0">
             <li class="font-light">
               <span class="font-semibold">Native Name:</span>
               {{ country.nativeName }}
@@ -45,7 +49,7 @@
               {{ country.capital }}
             </li>
           </ul>
-          <ul class="flex flex-col gap-2">
+          <ul class="flex flex-col gap-2 w-fit">
             <li class="font-light">
               <span class="font-semibold">Top Level Domain:</span>
               {{ country.topLevelDomain[0] }}
@@ -61,7 +65,7 @@
           </ul>
         </div>
 
-        <div class="mt-[68px] flex items-start gap-x-4">
+        <div class="mt-[68px] flex flex-wrap items-start gap-x-4 gap-y-4">
           <p class="font-semibold mt-1 shrink-0">Border Countries:</p>
           <div class="flex gap-[10px] flex-wrap">
             <a
