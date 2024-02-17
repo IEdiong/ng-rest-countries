@@ -13,3 +13,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class CountriesRoutingModule {}
+
+// TODO: 1. Make routes to be /countries and /countries/:countryName

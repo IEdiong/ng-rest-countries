@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { CountryService } from '../shared/country.service';
-import { ICountry } from '../shared/country.model';
-import { Observable } from 'rxjs';
+import { ICountry, ICountryLanguage } from '../shared/country.model';
+import { Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'rc-country-detail',
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./country-detail.component.scss'],
 })
 export class CountryDetailComponent implements OnInit {
-  languages!: string;
+  languages: string = '';
   countryDetail$!: Observable<ICountry>;
 
   constructor(
@@ -27,7 +27,16 @@ export class CountryDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const name: string = this.activatedRoute.snapshot.params['countryName'];
-    this.countryDetail$ = this.countryService.singleCountry(name);
+    this.countryDetail$ = this.countryService
+      .singleCountry(name)
+      .pipe(
+        tap(
+          (country) =>
+            (this.languages = country.languages
+              .map((lang) => lang.name)
+              .join(', '))
+        )
+      );
   }
 }
 

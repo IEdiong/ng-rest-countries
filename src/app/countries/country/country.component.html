@@ -1,4 +1,8 @@
-<a [routerLink]="[country.name]" class="country-card" *ngIf="!loading">
+<a
+  [routerLink]="[country.name.toLowerCase()]"
+  class="country-card"
+  *ngIf="!loading"
+>
   <div class="card-image">
     <img
       class="object-cover w-full"
