@@ -8,6 +8,7 @@ export interface ICountry {
   flag: string;
   flags: ICountryFlags;
   borders: string[];
+  borderCountries?: IBorderCountry[];
   nativeName: string;
   topLevelDomain: string[];
   currencies: ICountryCurrency[];
@@ -27,4 +28,9 @@ interface ICountryCurrency {
 
 export interface ICountryLanguage {
   name: string;
+}
+
+export interface IBorderCountry {
+  name: string;
+  code: string;
 }

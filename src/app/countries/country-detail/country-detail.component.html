@@ -65,15 +65,17 @@
           </ul>
         </div>
 
-        <div class="mt-[68px] flex flex-wrap items-start gap-x-4 gap-y-4">
+        <div
+          class="mt-[68px] flex flex-wrap md:flex-nowrap items-start gap-x-4 gap-y-4"
+        >
           <p class="font-semibold mt-1 shrink-0">Border Countries:</p>
           <div class="flex gap-[10px] flex-wrap">
             <a
-              routerLink="/{{ item.toLowerCase() }}"
-              *ngFor="let item of country?.borders"
-              class="shadow-tag px-[10px] rounded-sm w-24 h-7 flex items-center justify-center text-sm font-light"
+              routerLink="/{{ borderCountry.code.toLowerCase() }}"
+              *ngFor="let borderCountry of borderCountries"
+              class="shadow-tag px-[10px] shrink-0 rounded-sm min-w-24 h-7 flex items-center justify-center text-sm font-light"
             >
-              {{ item }}
+              {{ borderCountry.name }}
             </a>
           </div>
         </div>
