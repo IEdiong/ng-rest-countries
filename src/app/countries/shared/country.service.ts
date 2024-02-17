@@ -34,14 +34,9 @@ export class CountryService {
     // const url = `https://restcountries.com/v2/name/${name}?fullText=true`;
     const url = `https://restcountries.com/v2/alpha/${alpha}`;
 
-    return this.http
-      .get<ICountry>(url, {
-        context: new HttpContext().set(CACHING_ENABLED, true),
-      })
-      .pipe(
-        // map((res) => res[0]),
-        tap((data) => console.log('Single country', data))
-      );
+    return this.http.get<ICountry>(url, {
+      context: new HttpContext().set(CACHING_ENABLED, true),
+    });
   }
 
   private handleError(error: HttpErrorResponse) {

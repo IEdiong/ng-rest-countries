@@ -31,13 +31,13 @@ export class CacheInterceptor implements HttpInterceptor {
     // If cached response is available
     if (cachedResponse) {
       // return cached response
-      console.log(`Returning cached response`);
+      // console.log(`Returning cached response`);
       return of(cachedResponse);
     }
 
     // Else continue with request and cache the response
     return next.handle(request).pipe(
-      tap(() => console.log(`Getting response from server`)),
+      // tap(() => console.log(`Getting response from server`)),
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           this.cacheService.put(request.url, event);

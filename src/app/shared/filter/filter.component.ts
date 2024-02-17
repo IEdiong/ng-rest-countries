@@ -16,14 +16,14 @@ export class FilterComponent implements OnInit {
 
   toggleMenu() {
     this.menuIsOpen = !this.menuIsOpen;
-    console.log('menu is toggled');
+    // console.log('menu is toggled');
   }
 
   onRegionSelected(region: MouseEvent): void {
     const el = region.target as HTMLElement;
     const selectedRegion = el.textContent?.trim().toLowerCase();
 
-    console.log(selectedRegion);
+    // console.log(selectedRegion);
     if (selectedRegion === 'america') {
       this.regionSelected.emit('americas');
     } else {

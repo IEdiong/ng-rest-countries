@@ -3,19 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { CountryService } from '../shared/country.service';
-import {
-  IBorderCountry,
-  ICountry,
-  ICountryLanguage,
-} from '../shared/country.model';
-import {
-  Observable,
-  combineLatest,
-  concatMap,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { IBorderCountry, ICountry } from '../shared/country.model';
+import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'rc-country-detail',
@@ -30,7 +20,8 @@ export class CountryDetailComponent implements OnInit {
   constructor(
     private countryService: CountryService,
     private activatedRoute: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private titleService: Title
   ) {}
 
   onBack(): void {
@@ -62,14 +53,19 @@ export class CountryDetailComponent implements OnInit {
 
     this.countryDetail$ = combineLatest([countryDetail$, countries$]).pipe(
       tap(([country, countries]) => {
-        for (let i = 0; i < country.borders.length; i++) {
-          this.borderCountries = [
-            ...this.borderCountries,
-            ...countries.filter((c) => c.code === country.borders[i]),
-          ];
+        if (country.borders) {
+          for (let i = 0; i < country.borders.length; i++) {
+            this.borderCountries = [
+              ...this.borderCountries,
+              ...countries.filter((c) => c.code === country.borders[i]),
+            ];
+          }
         }
       }),
-      map(([country, countries]) => country)
+      map(([country, countries]) => country),
+      tap((country) =>
+        this.titleService.setTitle(`Countries of the world | ${country.name}`)
+      )
     );
   }
 }

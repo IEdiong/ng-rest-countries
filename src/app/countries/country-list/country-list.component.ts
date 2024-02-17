@@ -9,8 +9,10 @@ import {
   distinctUntilChanged,
   map,
   merge,
+  tap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'rc-country-list',
@@ -19,6 +21,7 @@ import { FormControl } from '@angular/forms';
 })
 export class CountryListComponent implements OnInit {
   pageSize = 16;
+  pageTitle = '';
   errMessage = '';
   searchFormControl = new FormControl('', { nonNullable: true });
 
@@ -85,11 +88,18 @@ export class CountryListComponent implements OnInit {
   finalPageData$ = merge(
     this.currentPageData$,
     this.paginatedSearchCountries$
-  ).pipe(distinctUntilChanged());
+  ).pipe(
+    distinctUntilChanged(),
+    tap(() => this.pageTitle.concat(' | Home'))
+  );
 
-  constructor(private countryService: CountryService) {}
+  constructor(
+    private countryService: CountryService,
+    private titleService: Title
+  ) {}
 
   ngOnInit(): void {
+    this.pageTitle = this.titleService.getTitle();
     this.searchFormControl.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe();
