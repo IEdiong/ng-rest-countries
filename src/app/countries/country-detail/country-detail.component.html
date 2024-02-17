@@ -5,16 +5,16 @@
     </button>
 
     <section
+      *ngIf="countryDetail$ | async as country; else loading"
       class="mt-20 flex flex-col md:flex-row items-start gap-x-[120px] relative overflow-hidden"
     >
       <div
-        class="h-[401px] w-[560px] rounded-[10px] overflow-hidden shadow-flag"
+        class="h-[401px] w-[560px] rounded-[10px] overflow-hidden shadow-flag relative"
       >
         <img
-          *ngIf="!loading"
           [src]="country.flag"
           alt="flag of ..."
-          class="w-full h-full"
+          class="w-full h-full object-cover"
         />
       </div>
       <div class="flex-1 py-[39px]">
@@ -75,6 +75,9 @@
         </div>
       </div>
     </section>
+    <ng-template #loading>
+      <p>loading...</p>
+    </ng-template>
   </div>
 </main>
 
