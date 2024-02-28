@@ -31,7 +31,6 @@ export class CountryService {
    * @returns An Observable of a single country
    */
   singleCountry(alpha: string) {
-    // const url = `https://restcountries.com/v2/name/${name}?fullText=true`;
     const url = `https://restcountries.com/v2/alpha/${alpha}`;
 
     return this.http.get<ICountry>(url, {

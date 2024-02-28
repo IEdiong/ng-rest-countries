@@ -4,8 +4,13 @@ import { CountryListComponent } from './country-list/country-list.component';
 import { CountryDetailComponent } from './country-detail/country-detail.component';
 
 const routes: Routes = [
-  { path: '', component: CountryListComponent, pathMatch: 'full' },
-  { path: ':countryCode', component: CountryDetailComponent },
+  {
+    path: 'countries',
+    children: [
+      { path: '', component: CountryListComponent },
+      { path: ':countryCode', component: CountryDetailComponent },
+    ],
+  },
 ];
 
 @NgModule({
@@ -13,5 +18,3 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class CountriesRoutingModule {}
-
-// TODO: 1. Make routes to be /countries and /countries/:countryCode

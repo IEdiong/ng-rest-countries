@@ -72,7 +72,7 @@
           <div class="flex gap-[10px] flex-wrap">
             <ng-container *ngIf="borderCountries.length > 0">
               <a
-                routerLink="/{{ borderCountry.code.toLowerCase() }}"
+                [routerLink]="['/countries', borderCountry.code.toLowerCase()]"
                 *ngFor="let borderCountry of borderCountries"
                 class="shadow-tag px-[10px] shrink-0 rounded-sm min-w-24 h-7 flex items-center justify-center text-sm font-light"
               >
