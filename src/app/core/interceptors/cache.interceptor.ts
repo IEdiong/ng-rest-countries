@@ -8,7 +8,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
-import { CacheService } from '../services/cache.service';
+import { CacheService } from '@core/services';
 
 export const CACHING_ENABLED = new HttpContextToken<boolean>(() => false);
 

@@ -4,9 +4,9 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CountriesModule } from './countries/countries.module';
-import { SharedModule } from './shared/shared.module';
-import { CacheInterceptor } from './core/interceptors/cache.interceptor';
+import { CountriesModule } from '@countries/countries.module';
+import { SharedModule } from '@shared/shared.module';
+import { CacheInterceptor } from '@core/interceptors';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,3 +23,5 @@ import { CacheInterceptor } from './core/interceptors/cache.interceptor';
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+// TODO: 1. Implement CI/CD pipeline with husky, prettier and eslint

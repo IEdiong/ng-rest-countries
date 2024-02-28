@@ -4,14 +4,14 @@ import {
   HttpContext,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { ICountry } from './country.model';
+import { ICountry } from '../shared/interfaces/country.model';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { CACHING_ENABLED } from 'src/app/core/interceptors/cache.interceptor';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CountryService {
+export class CountriesService {
   private allCountriesUrl = 'https://restcountries.com/v2/all';
 
   constructor(private http: HttpClient) {}

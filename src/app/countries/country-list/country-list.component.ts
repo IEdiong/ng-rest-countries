@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CountryService } from '../shared/country.service';
+import { CountriesService } from '../countries.service';
 import {
   BehaviorSubject,
   EMPTY,
@@ -13,6 +13,7 @@ import {
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { ICountry } from '@shared/interfaces';
 
 @Component({
   selector: 'rc-country-list',
@@ -31,7 +32,7 @@ export class CountryListComponent implements OnInit {
   selectedRegionAction$ = this.selectedRegionSubject.asObservable();
 
   countriesByRegion$ = combineLatest([
-    this.countryService.allCountries$,
+    this.countriesService.allCountries$,
     this.selectedRegionAction$,
   ]).pipe(
     map(([countries, region]) => {
@@ -63,7 +64,7 @@ export class CountryListComponent implements OnInit {
   );
 
   searchedCountries$ = combineLatest([
-    this.countryService.allCountries$,
+    this.countriesService.allCountries$,
     this.searchAction$,
   ]).pipe(
     map(([countries, searchQuery]) =>
@@ -94,7 +95,7 @@ export class CountryListComponent implements OnInit {
   );
 
   constructor(
-    private countryService: CountryService,
+    private countriesService: CountriesService,
     private titleService: Title
   ) {}
 
@@ -105,6 +106,10 @@ export class CountryListComponent implements OnInit {
       .subscribe();
   }
 
+  trackByFn(index: number, country: ICountry) {
+    return country.alpha3Code;
+  }
+
   onScroll() {
     this.currentPageSubject.next(this.currentPageSubject.value + 1);
   }
@@ -113,3 +118,6 @@ export class CountryListComponent implements OnInit {
     this.selectedRegionSubject.next(region);
   }
 }
+
+// TODO: 1. Extract all business logic to a service
+// TODO: 2. Make component DRY

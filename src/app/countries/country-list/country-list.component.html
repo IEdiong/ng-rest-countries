@@ -9,7 +9,7 @@
   >
     <div class="country-list-grid">
       <rc-country
-        *ngFor="let country of countries"
+        *ngFor="let country of countries; trackBy: trackByFn"
         [country]="country"
       ></rc-country>
       <div

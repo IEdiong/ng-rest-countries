@@ -1,16 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ICountry } from '../shared/country.model';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ICountry } from '@shared/interfaces';
 
 @Component({
   selector: 'rc-country',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './country.component.html',
-  styles: [],
 })
-export class CountryComponent implements OnInit {
+export class CountryComponent {
   @Input() country!: ICountry;
-  loading: boolean = true;
-
-  ngOnInit(): void {
-    this.loading = false;
-  }
 }

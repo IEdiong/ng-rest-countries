@@ -2,15 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { CountryService } from '../shared/country.service';
-import { IBorderCountry, ICountry } from '../shared/country.model';
+import { CountriesService } from '../countries.service';
+import { IBorderCountry, ICountry } from '@shared/interfaces';
 import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'rc-country-detail',
   templateUrl: './country-detail.component.html',
-  styleUrls: ['./country-detail.component.scss'],
 })
 export class CountryDetailComponent implements OnInit {
   languages: string = '';
@@ -18,7 +17,7 @@ export class CountryDetailComponent implements OnInit {
   borderCountries: IBorderCountry[] = [];
 
   constructor(
-    private countryService: CountryService,
+    private countriesService: CountriesService,
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private titleService: Title
@@ -29,10 +28,10 @@ export class CountryDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const countryDetail$ = this.activatedRoute.params.pipe(
+    const countryDetailRoute$ = this.activatedRoute.params.pipe(
       map((param) => param['countryCode']),
       switchMap((countryCode) =>
-        this.countryService.singleCountry(countryCode)
+        this.countriesService.singleCountry(countryCode)
       ),
       tap(
         (country) =>
@@ -42,7 +41,7 @@ export class CountryDetailComponent implements OnInit {
       )
     );
 
-    const countries$ = this.countryService.allCountries$.pipe(
+    const countries$ = this.countriesService.allCountries$.pipe(
       map((countries) =>
         countries.map((country) => ({
           name: country.name,
@@ -51,7 +50,7 @@ export class CountryDetailComponent implements OnInit {
       )
     );
 
-    this.countryDetail$ = combineLatest([countryDetail$, countries$]).pipe(
+    this.countryDetail$ = combineLatest([countryDetailRoute$, countries$]).pipe(
       tap(([country, countries]) => {
         if (country.borders) {
           for (let i = 0; i < country.borders.length; i++) {
