@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CountriesService } from '../countries.service';
 import {
   BehaviorSubject,
@@ -19,6 +19,7 @@ import { ICountry } from '@shared/interfaces';
   selector: 'rc-country-list',
   templateUrl: './country-list.component.html',
   styleUrls: ['./country-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CountryListComponent implements OnInit {
   pageSize = 16;
