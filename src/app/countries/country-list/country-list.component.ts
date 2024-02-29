@@ -39,13 +39,13 @@ export class CountryListComponent implements OnInit {
     map(([countries, region]) => {
       if (region === 'all') return countries;
       return countries.filter(
-        (country) => country.region.toLowerCase() === region
+        (country) => country.region.toLowerCase() === region,
       );
     }),
     catchError((err) => {
       this.errMessage = err;
       return EMPTY;
-    })
+    }),
   );
 
   currentPageData$ = combineLatest([
@@ -56,12 +56,12 @@ export class CountryListComponent implements OnInit {
     catchError((err) => {
       this.errMessage = err;
       return EMPTY;
-    })
+    }),
   );
 
   searchAction$ = this.searchFormControl.valueChanges.pipe(
     debounceTime(500),
-    distinctUntilChanged()
+    distinctUntilChanged(),
   );
 
   searchedCountries$ = combineLatest([
@@ -72,8 +72,8 @@ export class CountryListComponent implements OnInit {
       countries.filter((country) => {
         if (searchQuery === '') return countries;
         return country.name.toLowerCase().includes(searchQuery.toLowerCase());
-      })
-    )
+      }),
+    ),
   );
 
   paginatedSearchCountries$ = combineLatest([
@@ -84,20 +84,20 @@ export class CountryListComponent implements OnInit {
     catchError((err) => {
       this.errMessage = err;
       return EMPTY;
-    })
+    }),
   );
 
   finalPageData$ = merge(
     this.currentPageData$,
-    this.paginatedSearchCountries$
+    this.paginatedSearchCountries$,
   ).pipe(
     distinctUntilChanged(),
-    tap(() => this.pageTitle.concat(' | Home'))
+    tap(() => this.pageTitle.concat(' | Home')),
   );
 
   constructor(
     private countriesService: CountriesService,
-    private titleService: Title
+    private titleService: Title,
   ) {}
 
   ngOnInit(): void {

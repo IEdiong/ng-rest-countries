@@ -12,7 +12,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './country-detail.component.html',
 })
 export class CountryDetailComponent implements OnInit {
-  languages: string = '';
+  languages = '';
   countryDetail$!: Observable<ICountry>;
   borderCountries: IBorderCountry[] = [];
 
@@ -20,7 +20,7 @@ export class CountryDetailComponent implements OnInit {
     private countriesService: CountriesService,
     private activatedRoute: ActivatedRoute,
     private location: Location,
-    private titleService: Title
+    private titleService: Title,
   ) {}
 
   onBack(): void {
@@ -31,14 +31,14 @@ export class CountryDetailComponent implements OnInit {
     const countryDetailRoute$ = this.activatedRoute.params.pipe(
       map((param) => param['countryCode']),
       switchMap((countryCode) =>
-        this.countriesService.singleCountry(countryCode)
+        this.countriesService.singleCountry(countryCode),
       ),
       tap(
         (country) =>
           (this.languages = country.languages
             .map((lang) => lang.name)
-            .join(', '))
-      )
+            .join(', ')),
+      ),
     );
 
     const countries$ = this.countriesService.allCountries$.pipe(
@@ -46,8 +46,8 @@ export class CountryDetailComponent implements OnInit {
         countries.map((country) => ({
           name: country.name,
           code: country.alpha3Code,
-        }))
-      )
+        })),
+      ),
     );
 
     this.countryDetail$ = combineLatest([countryDetailRoute$, countries$]).pipe(
@@ -61,10 +61,10 @@ export class CountryDetailComponent implements OnInit {
           }
         }
       }),
-      map(([country, countries]) => country),
+      map(([country]) => country),
       tap((country) =>
-        this.titleService.setTitle(`Countries of the world | ${country.name}`)
-      )
+        this.titleService.setTitle(`Countries of the world | ${country.name}`),
+      ),
     );
   }
 }

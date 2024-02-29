@@ -13,7 +13,7 @@ import {
 })
 export class FilterComponent implements OnInit {
   regions: string[] = [];
-  menuIsOpen: boolean = false;
+  menuIsOpen = false;
   @Output() regionSelected = new EventEmitter<string>();
 
   ngOnInit(): void {

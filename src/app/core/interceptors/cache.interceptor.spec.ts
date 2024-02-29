@@ -6,7 +6,7 @@ describe('CacheInterceptor', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       providers: [CacheInterceptor],
-    })
+    }),
   );
 
   it('should be created', () => {

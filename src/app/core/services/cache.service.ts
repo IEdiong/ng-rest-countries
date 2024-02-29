@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
+import { ICountry } from '@shared/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CacheService {
-  private cache = new Map<string, any>();
+  private cache = new Map<string, ICountry[]>();
 
-  constructor() {}
-
-  put(url: string, data: any) {
+  put(url: string, data: ICountry[]) {
     this.cache.set(url, data);
   }
 
-  get(url: string): any | undefined {
+  get(url: string): ICountry[] | undefined {
     return this.cache.get(url);
   }
 

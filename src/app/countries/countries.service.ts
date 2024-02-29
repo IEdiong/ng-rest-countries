@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { ICountry } from '../shared/interfaces/country.model';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { catchError, map, throwError } from 'rxjs';
 import { CACHING_ENABLED } from 'src/app/core/interceptors/cache.interceptor';
 import { environment } from 'src/environments/environment';
 
@@ -21,7 +21,7 @@ export class CountriesService {
     })
     .pipe(
       map((data) => this.sortCountries(data)),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
 
   /**
@@ -46,23 +46,23 @@ export class CountriesService {
       // The response body may contain clues as to what went wrong.
       console.error(
         `Backend returned code ${error.status}, body was: `,
-        error.error
+        error.error,
       );
     }
     // Return an observable with a user-facing error message.
     return throwError(
-      () => new Error('Something bad happened; please try again later.')
+      () => new Error('Something bad happened; please try again later.'),
     );
   }
 
   private sortCountries(data: ICountry[]): ICountry[] {
-    let favArr: ICountry[] = [];
+    const favArr: ICountry[] = [];
     ['Germany', 'United States of America', 'Brazil', 'Iceland'].forEach(
       (el) => {
-        let tempData = data.find((cty) => cty.name === el);
+        const tempData = data.find((cty) => cty.name === el);
         if (tempData !== undefined) favArr.push(tempData);
         data = data.filter((cty) => cty.name !== el);
-      }
+      },
     );
     return [...favArr, ...data];
   }

@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./skeleton.component.scss'],
 })
 export class SkeletonComponent {
-  @Input() loading: boolean = false;
+  @Input() loading = false;
   @Input() width!: string;
 }

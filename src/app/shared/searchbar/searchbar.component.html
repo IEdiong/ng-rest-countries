@@ -1,5 +1,5 @@
 <div
-  class="relative flex items-center justify-start h-12 sm:h-14 w-full sm:min-w-[370px] md:w-[_480px] shadow-filter rounded-[5px] overflow-hidden bg-white dark:bg-dark-blue"
+  class="relative flex h-12 w-full items-center justify-start overflow-hidden rounded-[5px] bg-white shadow-filter dark:bg-dark-blue sm:h-14 sm:min-w-[370px] md:w-[_480px]"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -7,7 +7,7 @@
     height="18"
     viewBox="0 0 18 18"
     fill="none"
-    class="absolute h-[18px] w-[18px] ms-8 text-gray-500 fill-dark-gray dark:fill-white"
+    class="absolute ms-8 h-[18px] w-[18px] fill-dark-gray text-gray-500 dark:fill-white"
   >
     <path
       fill-rule="evenodd"
@@ -19,10 +19,10 @@
 
   <input
     [formControl]="searchControl"
-    class="w-full h-full pl-[74px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 placeholder:text-dark-gray placeholder:font-normal placeholder:text-sm placeholder:leading-5 dark:bg-dark-blue dark:placeholder:text-white"
+    class="h-full w-full pl-[74px] placeholder:text-sm placeholder:font-normal placeholder:leading-5 placeholder:text-dark-gray focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100 dark:bg-dark-blue dark:placeholder:text-white"
     type="text"
     id="search"
     placeholder="Search for a country..."
   />
-  <label html-for="search" class="sr-only">Search</label>
+  <label for="search" class="sr-only">Search</label>
 </div>

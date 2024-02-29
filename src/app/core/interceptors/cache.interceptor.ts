@@ -9,6 +9,7 @@ import {
 } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 import { CacheService } from '@core/services';
+import { ICountry } from '@shared/interfaces';
 
 export const CACHING_ENABLED = new HttpContextToken<boolean>(() => false);
 
@@ -17,9 +18,11 @@ export class CacheInterceptor implements HttpInterceptor {
   constructor(private cacheService: CacheService) {}
 
   intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+    request: HttpRequest<ICountry[]>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<ICountry[]>> {
+    console.log();
+
     // Check if ther request is cachable
     if (!request.context.get(CACHING_ENABLED)) {
       return next.handle(request);
@@ -32,17 +35,17 @@ export class CacheInterceptor implements HttpInterceptor {
     if (cachedResponse) {
       // return cached response
       // console.log(`Returning cached response`);
-      return of(cachedResponse);
+      return of(new HttpResponse({ body: cachedResponse }));
     }
 
     // Else continue with request and cache the response
     return next.handle(request).pipe(
       // tap(() => console.log(`Getting response from server`)),
-      tap((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
-          this.cacheService.put(request.url, event);
+      tap((event: HttpEvent<ICountry[]>) => {
+        if (event instanceof HttpResponse && event.body !== null) {
+          this.cacheService.put(request.url, event.body);
         }
-      })
+      }),
     );
   }
 }
