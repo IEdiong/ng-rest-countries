@@ -7,17 +7,16 @@ import {
 import { ICountry } from '../shared/interfaces/country.model';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { CACHING_ENABLED } from 'src/app/core/interceptors/cache.interceptor';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CountriesService {
-  private allCountriesUrl = 'https://restcountries.com/v2/all';
-
   constructor(private http: HttpClient) {}
 
   allCountries$ = this.http
-    .get<ICountry[]>(this.allCountriesUrl, {
+    .get<ICountry[]>(`${environment.baseUrl}/all`, {
       context: new HttpContext().set(CACHING_ENABLED, true),
     })
     .pipe(
@@ -31,7 +30,7 @@ export class CountriesService {
    * @returns An Observable of a single country
    */
   singleCountry(alpha: string) {
-    const url = `https://restcountries.com/v2/alpha/${alpha}`;
+    const url = `${environment.baseUrl}/alpha/${alpha}`;
 
     return this.http.get<ICountry>(url, {
       context: new HttpContext().set(CACHING_ENABLED, true),
