@@ -34,7 +34,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [here](https://www.frontendmentor.io/solutions/rest-countries-api-with-themes-using-angular-rxjs-and-tailwindcss-Ko4RRCDHE7)
+- Solution URL: [frontendmentor](https://www.frontendmentor.io/solutions/rest-countries-api-with-themes-using-angular-rxjs-and-tailwindcss-Ko4RRCDHE7)
 - Live Site URL: [ei-countries.netlify.app](https://ei-countries.netlify.app/)
 
 ## My process
