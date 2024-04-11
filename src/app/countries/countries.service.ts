@@ -24,6 +24,15 @@ export class CountriesService {
       catchError(this.handleError),
     );
 
+  countriesWithCodeName$ = this.allCountries$.pipe(
+    map((countries) =>
+      countries.map((country) => ({
+        name: country.name,
+        code: country.alpha3Code,
+      })),
+    ),
+  );
+
   /**
    * Observable of a single country
    * @param name Name of the country

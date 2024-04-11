@@ -1,33 +1,33 @@
 <main class="py-10 lg:py-20">
-  <div class="container px-7 lg:px-6 max-w-[1328px]">
-    <button (click)="onBack()" class="shadow-back px-8 py-2 rounded-md">
+  <div class="container max-w-[1328px] px-7 lg:px-6">
+    <button (click)="onBack()" class="rounded-md px-8 py-2 shadow-back">
       &larr; <span class="ml-2">Back</span>
     </button>
 
     <section
       *ngIf="countryDetail$ | async as country; else loading"
-      class="mt-16 lg:mt-20 flex flex-col lg:flex-row items-start lg:justify-between lg:gap-x-8 relative overflow-hidden"
+      class="relative mt-16 flex flex-col items-start overflow-hidden lg:mt-20 lg:flex-row lg:justify-between lg:gap-x-8"
     >
       <div
-        class="flex-1 max-w-[560px] rounded-[10px] overflow-hidden shadow-flag relative aspect-[560/401]"
+        class="relative aspect-[560/401] max-w-[560px] flex-1 overflow-hidden rounded-[10px] shadow-flag"
       >
         <img
           [src]="country.flag"
           alt="flag of {{ country.name }}"
-          class="h-full w-full object-cover aspect-[560/401]"
+          class="aspect-[560/401] h-full w-full object-cover"
         />
       </div>
-      <div class="flex-1 max-w-[600px] py-11 lg:py-[39px]">
+      <div class="max-w-[600px] flex-1 py-11 lg:py-[39px]">
         <h1
-          class="font-extrabold text-[22px] md:text-[32px] leading-[30px] md:leading-[44px]"
+          class="text-[22px] font-extrabold leading-[30px] md:text-[32px] md:leading-[44px]"
         >
           {{ country.name }}
         </h1>
 
         <div
-          class="flex flex-col md:flex-row gap-x-3 gap-y-8 justify-between mt-4 lg:mt-[23px] max-w-[510px] text-sm md:text-base"
+          class="mt-4 flex max-w-[510px] flex-col justify-between gap-x-3 gap-y-8 text-sm md:flex-row md:text-base lg:mt-[23px]"
         >
-          <ul class="flex flex-col gap-2 shrink-0">
+          <ul class="flex shrink-0 flex-col gap-2">
             <li class="font-light">
               <span class="font-semibold">Native Name:</span>
               {{ country.nativeName }}
@@ -46,17 +46,23 @@
             </li>
             <li class="font-light">
               <span class="font-semibold">Capital:</span>
-              {{ country.capital }}
+              <ng-container *ngIf="country.capital; else nil">
+                {{ country.capital }}
+              </ng-container>
             </li>
           </ul>
-          <ul class="flex flex-col gap-2 w-fit">
+          <ul class="flex w-fit flex-col gap-2">
             <li class="font-light">
               <span class="font-semibold">Top Level Domain:</span>
-              {{ country.topLevelDomain[0] }}
+              <ng-container *ngIf="country.topLevelDomain.length > 0; else nil">
+                {{ country.topLevelDomain[0] }}
+              </ng-container>
             </li>
             <li class="font-light">
               <span class="font-semibold">Currencies:</span>
-              {{ country.currencies[0].name }}
+              <ng-container *ngIf="country?.currencies; else nil">
+                {{ country.currencies[0].name }}
+              </ng-container>
             </li>
             <li class="font-light">
               <span class="font-semibold">Languages:</span>
@@ -66,15 +72,17 @@
         </div>
 
         <div
-          class="mt-[68px] flex flex-wrap md:flex-nowrap items-start gap-x-4 gap-y-4"
+          class="mt-[68px] flex flex-wrap items-start gap-x-4 gap-y-4 md:flex-nowrap"
         >
-          <p class="font-semibold mt-1 shrink-0">Border Countries:</p>
-          <div class="flex gap-[10px] flex-wrap">
-            <ng-container *ngIf="borderCountries.length > 0">
+          <p class="mt-1 shrink-0 font-semibold">Border Countries:</p>
+          <div class="flex flex-wrap items-stretch gap-[10px]">
+            <ng-container
+              *ngIf="borderCountries.length > 0; else noBorderCountries"
+            >
               <a
                 [routerLink]="['/countries', borderCountry.code.toLowerCase()]"
                 *ngFor="let borderCountry of borderCountries"
-                class="shadow-tag px-[10px] shrink-0 rounded-sm min-w-24 h-7 flex items-center justify-center text-sm font-light"
+                class="min-w-24 flex h-7 shrink-0 items-center justify-center rounded-sm px-[10px] text-sm font-light shadow-tag"
               >
                 {{ borderCountry.name }}
               </a>
@@ -85,72 +93,72 @@
     </section>
     <ng-template #loading>
       <section
-        class="mt-16 lg:mt-20 w-full flex flex-col lg:flex-row items-start lg:justify-between lg:gap-x-8 relative overflow-hidden"
+        class="relative mt-16 flex w-full flex-col items-start overflow-hidden lg:mt-20 lg:flex-row lg:justify-between lg:gap-x-8"
       >
         <div
-          class="animate-pulse flex-1 w-full max-w-[560px] rounded-[10px] overflow-hidden shadow-flag relative aspect-[560/401]"
+          class="relative aspect-[560/401] w-full max-w-[560px] flex-1 animate-pulse overflow-hidden rounded-[10px] shadow-flag"
         >
-          <div class="bg-slate-200 dark:bg-slate-700 w-full h-full"></div>
+          <div class="h-full w-full bg-slate-200 dark:bg-slate-700"></div>
         </div>
-        <div class="flex-1 w-full max-w-[600px] py-11 lg:py-[39px]">
+        <div class="w-full max-w-[600px] flex-1 py-11 lg:py-[39px]">
           <div
-            class="bg-slate-200 dark:bg-slate-700 rounded-full w-1/3 h-[30px]"
+            class="h-[30px] w-1/3 rounded-full bg-slate-200 dark:bg-slate-700"
           ></div>
 
           <div
-            class="flex flex-col md:flex-row gap-x-3 gap-y-8 justify-between mt-4 lg:mt-[23px] max-w-[510px] text-sm md:text-base"
+            class="mt-4 flex max-w-[510px] flex-col justify-between gap-x-3 gap-y-8 text-sm md:flex-row md:text-base lg:mt-[23px]"
           >
-            <ul class="flex flex-col gap-2 w-[50%] shrink-0">
+            <ul class="flex w-[50%] shrink-0 flex-col gap-2">
               <li class="font-light">
                 <div
-                  class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[24px]"
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
                 ></div>
               </li>
               <li class="font-light">
                 <div
-                  class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[24px]"
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
                 ></div>
               </li>
               <li class="font-light">
                 <div
-                  class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[24px]"
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
                 ></div>
               </li>
               <li class="font-light">
                 <div
-                  class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[24px]"
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
                 ></div>
               </li>
               <li class="font-light">
                 <div
-                  class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[24px]"
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
                 ></div>
               </li>
             </ul>
-            <ul class="flex flex-col gap-2 w-[40%]">
+            <ul class="flex w-[40%] flex-col gap-2">
               <li class="font-light">
                 <div
-                  class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[24px]"
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
                 ></div>
               </li>
               <li class="font-light">
                 <div
-                  class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[24px]"
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
                 ></div>
               </li>
               <li class="font-light">
                 <div
-                  class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[24px]"
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
                 ></div>
               </li>
             </ul>
           </div>
 
           <div
-            class="mt-[68px] flex flex-wrap md:flex-nowrap items-start gap-x-4 gap-y-4"
+            class="mt-[68px] flex flex-wrap items-start gap-x-4 gap-y-4 md:flex-nowrap"
           >
             <div
-              class="bg-slate-200 dark:bg-slate-700 rounded-full w-full h-[34px]"
+              class="h-[34px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
             ></div>
           </div>
         </div>
@@ -158,5 +166,13 @@
     </ng-template>
   </div>
 </main>
+
+<ng-template #noBorderCountries>
+  <span class="mt-1">No border countries</span>
+</ng-template>
+
+<ng-template #nil>
+  <span class="ms-1">Nil</span>
+</ng-template>
 
 <!-- TODO: 1. Handle edge case for when a property doesn't exist. For example: "Antarctica" -->
