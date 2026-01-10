@@ -2,13 +2,13 @@
   "name": "web",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "sourceRoot": "apps/web/src",
+  "prefix": "rc",
   "generators": {
     "@schematics/angular:component": {
       "style": "scss"
     }
   },
-  "sourceRoot": "apps/web/src",
-  "prefix": "rc",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -74,7 +74,10 @@
           "browserTarget": "web:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/web/proxy.conf.json"
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -88,10 +91,7 @@
         "polyfills": ["zone.js", "zone.js/testing"],
         "tsConfig": "apps/web/tsconfig.spec.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/web/src/favicon.ico",
-          "apps/web/src/assets"
-        ],
+        "assets": ["apps/web/src/favicon.ico", "apps/web/src/assets"],
         "styles": ["apps/web/src/styles.scss"],
         "scripts": []
       }
@@ -99,10 +99,7 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": [
-          "apps/web/**/*.ts",
-          "apps/web/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/web/**/*.ts", "apps/web/**/*.html"]
       }
     }
   }
