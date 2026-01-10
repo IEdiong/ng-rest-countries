@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-ng lint --fix && ng lint && git add .
+npx nx lint web --fix && git add .

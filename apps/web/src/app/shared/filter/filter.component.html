@@ -2,7 +2,7 @@
   <button
     (click)="toggleMenu()"
     type="button"
-    class="inline-flex justify-between items-center h-14 w-[200px] rounded-[5px] shadow-filter ps-6 pe-[22px] py-[18px] bg-white hover:bg-gray-50 dark:bg-dark-blue"
+    class="inline-flex h-14 w-[200px] items-center justify-between rounded-[5px] bg-white py-[18px] pe-[22px] ps-6 shadow-filter hover:bg-gray-50 dark:bg-dark-blue"
     id="filter-button"
     aria-haspopup="true"
     aria-expanded="false"
@@ -30,11 +30,11 @@
 
   <ul
     *ngIf="menuIsOpen"
-    class="absolute sm:-right-[0.5px] top-[140px] sm:top-14 mt-2 sm:mt-1 w-[200px] rounded-[5px] shadow-filter bg-white h-[164px] transition-opacity ease-out duration-1000 origin-top dark:bg-dark-blue"
+    class="absolute top-[140px] mt-2 h-[164px] w-[200px] origin-top rounded-[5px] bg-white shadow-filter transition-opacity duration-1000 ease-out dark:bg-dark-blue sm:-right-[0.5px] sm:top-14 sm:mt-1"
     [ngClass]="
       menuIsOpen
-        ? ' transform z-10 opacity-100 h-[164px]'
-        : 'origin-top z-0 overflow-hidden h-0'
+        ? ' z-10 h-[164px] transform opacity-100'
+        : 'z-0 h-0 origin-top overflow-hidden'
     "
     id="menu-content"
     role="menu"
@@ -43,11 +43,11 @@
     role="menu"
     tabIndex="-1"
   >
-    <div class="py-4 flex flex-col justify-between h-full" role="none">
+    <div class="flex h-full flex-col justify-between py-4" role="none">
       <li role="presentation" class="flex-1" *ngFor="let region of regions">
         <button
           (click)="onRegionSelected($event)"
-          class="block px-6 h-full text-sm font-normal transition-all ease-in-out w-full text-left hover:bg-gray-100 hover:text-gray-900 hover:pl-8 dark:hover:text-white dark:hover:bg-lighter-blue"
+          class="block h-full w-full px-6 text-left text-sm font-normal transition-all ease-in-out hover:bg-gray-100 hover:pl-8 hover:text-gray-900 dark:hover:bg-lighter-blue dark:hover:text-white"
           role="menuitem"
           tabIndex="-1"
           id="menu-item-0"

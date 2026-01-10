@@ -1,6 +1,6 @@
 <header class="header">
   <div>
-    <h1 class="font-extrabold text-sm sm:text-2xl">Where in the world?</h1>
+    <h1 class="text-sm font-extrabold sm:text-2xl">Where in the world?</h1>
     <button
       (click)="toggleTheme()"
       class="text-xs sm:text-base sm:leading-[22px]"
@@ -19,7 +19,7 @@
         aria-hidden="true"
         size="1em"
       ></ng-icon>
-      {{ theme === "light" ? "dark" : "light" }} mode
+      {{ theme === 'light' ? 'dark' : 'light' }} mode
     </button>
   </div>
 </header>

@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Nunito Sans", sans-serif;
+    /* color: #858585; */
+  }
+
+  body {
+    @apply min-h-screen bg-v-light-gray text-v-dark-blue dark:bg-vd-dark-blue dark:text-white;
+  }
+
+  app-root {
+    @apply block min-h-screen;
+  }
+}
+
+@layer components {
+  .header {
+    @apply w-full bg-white shadow-nav dark:bg-dark-blue;
+  }
+
+  .header > div {
+    @apply container flex max-w-[1328px] items-center justify-between px-6 py-6;
+  }
+
+  .header button {
+    @apply inline-flex items-center gap-x-1 font-semibold capitalize;
+  }
+
+  .country-list-container {
+    @apply container max-w-[1328px] sm:px-6;
+  }
+
+  .country-list-grid {
+    @apply grid grid-cols-[repeat(auto-fill,_264px)] justify-center gap-x-[74.5px] gap-y-[73px];
+  }
+  .country-card {
+    @apply block w-full min-w-[264px] overflow-hidden rounded-[5px] bg-white shadow-card transition duration-300 ease-in-out dark:bg-dark-blue lg:hover:cursor-pointer lg:hover:drop-shadow-2xl lg:focus-visible:outline-none lg:focus-visible:drop-shadow-2xl lg:dark:hover:bg-lighter-blue;
+  }
+
+  .card-image img {
+    @apply aspect-[5/3] h-[160px] max-w-full object-cover;
+  }
+
+  .card-body {
+    @apply flex flex-col justify-between gap-y-4 px-[26px] pb-[46px] pt-6;
+  }
+  .card-title {
+    @apply font-extrabold leading-[26px];
+  }
+
+  .card-info {
+    @apply text-sm font-semibold leading-4;
+  }
+}

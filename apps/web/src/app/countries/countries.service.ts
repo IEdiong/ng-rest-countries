@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpContext,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { ICountry } from '../shared/interfaces/country.model';
+import { inject, Injectable } from '@angular/core';
 import { catchError, map, throwError } from 'rxjs';
-import { CACHING_ENABLED } from 'src/app/core/interceptors/cache.interceptor';
-import { environment } from 'src/environments/environment';
+
+import { CACHING_ENABLED } from '../core/interceptors/cache.interceptor';
+import { ICountry } from '../shared/interfaces/country.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CountriesService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   allCountries$ = this.http
     .get<ICountry[]>(`${environment.baseUrl}/all`, {
