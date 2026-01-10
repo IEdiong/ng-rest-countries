@@ -7,13 +7,12 @@ import {
   combineLatest,
   debounceTime,
   distinctUntilChanged,
-  map,
-  merge,
+  switchMap,
   tap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { ICountry } from '@shared/interfaces';
+import { ICountry } from '@rest-countries/shared';
 
 @Component({
   selector: 'rc-country-list',
@@ -22,7 +21,7 @@ import { ICountry } from '@shared/interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CountryListComponent implements OnInit {
-  pageSize = 16;
+  pageSize = 20;
   pageTitle = '';
   errMessage = '';
   searchFormControl = new FormControl('', { nonNullable: true });
@@ -32,67 +31,30 @@ export class CountryListComponent implements OnInit {
   private selectedRegionSubject = new BehaviorSubject('all');
   selectedRegionAction$ = this.selectedRegionSubject.asObservable();
 
-  countriesByRegion$ = combineLatest([
-    this.countriesService.allCountries$,
-    this.selectedRegionAction$,
-  ]).pipe(
-    map(([countries, region]) => {
-      if (region === 'all') return countries;
-      return countries.filter(
-        (country) => country.region.toLowerCase() === region,
-      );
-    }),
-    catchError((err) => {
-      this.errMessage = err;
-      return EMPTY;
-    }),
-  );
-
-  currentPageData$ = combineLatest([
-    this.countriesByRegion$,
-    this.currentPageAction$,
-  ]).pipe(
-    map(([countries, page]) => countries.slice(0, page * this.pageSize)),
-    catchError((err) => {
-      this.errMessage = err;
-      return EMPTY;
-    }),
-  );
-
   searchAction$ = this.searchFormControl.valueChanges.pipe(
     debounceTime(500),
     distinctUntilChanged(),
   );
 
-  searchedCountries$ = combineLatest([
-    this.countriesService.allCountries$,
+  // Server-side filtering and pagination
+  finalPageData$ = combineLatest([
     this.searchAction$,
-  ]).pipe(
-    map(([countries, searchQuery]) =>
-      countries.filter((country) => {
-        if (searchQuery === '') return countries;
-        return country.name.toLowerCase().includes(searchQuery.toLowerCase());
-      }),
-    ),
-  );
-
-  paginatedSearchCountries$ = combineLatest([
-    this.searchedCountries$,
+    this.selectedRegionAction$,
     this.currentPageAction$,
   ]).pipe(
-    map(([countries, page]) => countries.slice(0, page * this.pageSize)),
+    switchMap(([search, region, page]) =>
+      this.countriesService.getAllCountries(
+        search || undefined,
+        region !== 'all' ? region : undefined,
+        page,
+        this.pageSize,
+      ),
+    ),
+    tap(() => this.pageTitle.concat(' | Home')),
     catchError((err) => {
       this.errMessage = err;
       return EMPTY;
     }),
-  );
-
-  finalPageData$ = merge(
-    this.currentPageData$,
-    this.paginatedSearchCountries$,
-  ).pipe(
-    distinctUntilChanged(),
-    tap(() => this.pageTitle.concat(' | Home')),
   );
 
   constructor(
@@ -116,6 +78,7 @@ export class CountryListComponent implements OnInit {
   }
 
   onRegionSelectionChanged(region: string) {
+    this.currentPageSubject.next(1); // Reset to page 1
     this.selectedRegionSubject.next(region);
   }
 }

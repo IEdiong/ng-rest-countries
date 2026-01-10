@@ -2,12 +2,13 @@ import {
   HttpClient,
   HttpContext,
   HttpErrorResponse,
+  HttpParams,
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, map, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 
 import { CACHING_ENABLED } from '../core/interceptors/cache.interceptor';
-import { ICountry } from '../shared/interfaces/country.model';
+import { ICountry, PaginatedResponse } from '@rest-countries/shared';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -16,14 +17,49 @@ import { environment } from '../../environments/environment';
 export class CountriesService {
   private http = inject(HttpClient);
 
-  allCountries$ = this.http
-    .get<ICountry[]>(`${environment.baseUrl}/all`, {
-      context: new HttpContext().set(CACHING_ENABLED, true),
-    })
-    .pipe(
-      map((data) => this.sortCountries(data)),
-      catchError(this.handleError),
-    );
+  /**
+   * Get all countries with optional filtering and pagination
+   * @param search Search query for name or capital
+   * @param region Region filter
+   * @param page Page number (default: 1)
+   * @param limit Items per page (default: 20)
+   * @returns Observable of paginated countries
+   */
+  getAllCountries(
+    search?: string,
+    region?: string,
+    page = 1,
+    limit = 20,
+  ): Observable<PaginatedResponse<ICountry>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
+    if (search) {
+      params = params.set('search', search);
+    }
+    if (region && region !== 'all') {
+      params = params.set('region', region);
+    }
+
+    return this.http
+      .get<PaginatedResponse<ICountry>>(environment.baseUrl, {
+        params,
+        context: new HttpContext().set(CACHING_ENABLED, true),
+      })
+      .pipe(
+        map((response) => ({
+          ...response,
+          items: this.sortCountries(response.items),
+        })),
+        catchError(this.handleError),
+      );
+  }
+
+  // Legacy support - returns all countries without pagination
+  allCountries$ = this.getAllCountries(undefined, undefined, 1, 250).pipe(
+    map((response) => response.items),
+  );
 
   countriesWithCodeName$ = this.allCountries$.pipe(
     map((countries) =>
@@ -35,12 +71,12 @@ export class CountriesService {
   );
 
   /**
-   * Observable of a single country
-   * @param name Name of the country
+   * Get a single country by alpha3 code
+   * @param alpha Alpha3 code of the country
    * @returns An Observable of a single country
    */
-  singleCountry(alpha: string) {
-    const url = `${environment.baseUrl}/alpha/${alpha}`;
+  singleCountry(alpha: string): Observable<ICountry> {
+    const url = `${environment.baseUrl}/${alpha}`;
 
     return this.http.get<ICountry>(url, {
       context: new HttpContext().set(CACHING_ENABLED, true),

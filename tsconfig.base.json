@@ -22,7 +22,8 @@
     "paths": {
       "@core/*": ["./apps/web/src/app/core/*"],
       "@countries/*": ["./apps/web/src/app/countries/*"],
-      "@shared/*": ["./apps/web/src/app/shared/*"]
+      "@shared/*": ["./apps/web/src/app/shared/*"],
+      "@rest-countries/shared": ["./libs/shared/src/index.ts"]
     },
     "rootDir": "."
   },

@@ -77,11 +77,17 @@
           <p class="mt-1 shrink-0 font-semibold">Border Countries:</p>
           <div class="flex flex-wrap items-stretch gap-[10px]">
             <ng-container
-              *ngIf="borderCountries.length > 0; else noBorderCountries"
+              *ngIf="
+                country.borderCountries && country.borderCountries.length > 0;
+                else noBorderCountries
+              "
             >
               <a
-                [routerLink]="['/countries', borderCountry.code.toLowerCase()]"
-                *ngFor="let borderCountry of borderCountries"
+                [routerLink]="[
+                  '/countries',
+                  borderCountry.alpha3Code.toLowerCase()
+                ]"
+                *ngFor="let borderCountry of country.borderCountries"
                 class="min-w-24 flex h-7 shrink-0 items-center justify-center rounded-sm px-[10px] text-sm font-light shadow-tag"
               >
                 {{ borderCountry.name }}

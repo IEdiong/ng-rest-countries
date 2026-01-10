@@ -4,12 +4,12 @@
     [searchForm]="searchFormControl"
   ></rc-toolbar>
   <div
-    *ngIf="finalPageData$ | async as countries; else loading"
+    *ngIf="finalPageData$ | async as response; else loading"
     class="country-list-container"
   >
     <div class="country-list-grid">
       <rc-country
-        *ngFor="let country of countries; trackBy: trackByFn"
+        *ngFor="let country of response.items; trackBy: trackByFn"
         [country]="country"
       ></rc-country>
       <div

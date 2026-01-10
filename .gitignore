@@ -41,7 +41,13 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# AI
+.github/tasks/*
 
-
+# Nx
 .nx/cache
 .nx/workspace-data
+
+# Secrets
+.env
+.env.*
