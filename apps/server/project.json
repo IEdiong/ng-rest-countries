@@ -23,8 +23,7 @@
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "server:build",
-        "runBuildTargetDependencies": false,
-        "port": 3000
+        "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {

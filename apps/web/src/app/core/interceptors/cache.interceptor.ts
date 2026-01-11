@@ -29,7 +29,7 @@ export class CacheInterceptor implements HttpInterceptor {
     }
 
     // Get cached response from cache service
-    const cachedResponse = this.cacheService.get(request.url);
+    const cachedResponse = this.cacheService.get(request.urlWithParams);
 
     // If cached response is available
     if (cachedResponse) {
@@ -43,7 +43,7 @@ export class CacheInterceptor implements HttpInterceptor {
       // tap(() => console.log(`Getting response from server`)),
       tap((event: HttpEvent<ICountry[]>) => {
         if (event instanceof HttpResponse && event.body !== null) {
-          this.cacheService.put(request.url, event.body);
+          this.cacheService.put(request.urlWithParams, event.body);
         }
       }),
     );

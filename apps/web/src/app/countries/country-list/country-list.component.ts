@@ -8,6 +8,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   switchMap,
+  startWith,
   tap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -32,6 +33,7 @@ export class CountryListComponent implements OnInit {
   selectedRegionAction$ = this.selectedRegionSubject.asObservable();
 
   searchAction$ = this.searchFormControl.valueChanges.pipe(
+    startWith(''),
     debounceTime(500),
     distinctUntilChanged(),
   );
@@ -42,19 +44,26 @@ export class CountryListComponent implements OnInit {
     this.selectedRegionAction$,
     this.currentPageAction$,
   ]).pipe(
-    switchMap(([search, region, page]) =>
-      this.countriesService.getAllCountries(
-        search || undefined,
-        region !== 'all' ? region : undefined,
-        page,
-        this.pageSize,
-      ),
+    tap(([search, region, page]) =>
+      console.log('Stream emitted:', { search, region, page }),
     ),
-    tap(() => this.pageTitle.concat(' | Home')),
-    catchError((err) => {
-      this.errMessage = err;
-      return EMPTY;
-    }),
+    switchMap(([search, region, page]) =>
+      this.countriesService
+        .getAllCountries(
+          search || undefined,
+          region !== 'all' ? region : undefined,
+          page,
+          this.pageSize,
+        )
+        .pipe(
+          catchError((err) => {
+            this.errMessage = err;
+            console.error('Error in getAllCountries:', err);
+            return EMPTY;
+          }),
+        ),
+    ),
+    tap((data) => console.log('Data received:', data)),
   );
 
   constructor(
