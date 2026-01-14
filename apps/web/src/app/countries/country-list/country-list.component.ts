@@ -1,5 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { CountriesService } from '../countries.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
+import { ICountry, PaginatedResponse } from '@rest-countries/shared';
 import {
   BehaviorSubject,
   EMPTY,
@@ -10,12 +20,9 @@ import {
   map,
   scan,
   switchMap,
-  startWith,
   tap,
 } from 'rxjs';
-import { FormControl } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
-import { ICountry, PaginatedResponse } from '@rest-countries/shared';
+import { CountriesService } from '../countries.service';
 
 @Component({
   selector: 'rc-country-list',
@@ -24,6 +31,12 @@ import { ICountry, PaginatedResponse } from '@rest-countries/shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CountryListComponent implements OnInit {
+  private readonly countriesService = inject(CountriesService);
+  private readonly titleService = inject(Title);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+
   pageSize = 20;
   pageTitle = '';
   errMessage = '';
@@ -32,27 +45,36 @@ export class CountryListComponent implements OnInit {
 
   private currentPageSubject = new BehaviorSubject(1);
   currentPageAction$ = this.currentPageSubject.asObservable();
-  private selectedRegionSubject = new BehaviorSubject('all');
-  selectedRegionAction$ = this.selectedRegionSubject.asObservable();
 
-  searchAction$ = this.searchFormControl.valueChanges.pipe(
-    startWith(''),
-    debounceTime(500),
-    distinctUntilChanged(),
-    tap(() => this.currentPageSubject.next(1)),
+  // Source of truth for filters comes from the route
+  private routeParams$ = this.route.queryParams.pipe(
+    map((params) => ({
+      search: params['search'] || '',
+      region: params['region'] || 'all',
+    })),
+    distinctUntilChanged(
+      (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr),
+    ),
+    tap(({ search }) => {
+      // Keep form control in sync with route (e.g. for back button)
+      if (this.searchFormControl.value !== search) {
+        this.searchFormControl.setValue(search, { emitEvent: false });
+      }
+      // Reset to page 1 whenever filters change
+      this.currentPageSubject.next(1);
+    }),
   );
 
-  // Server-side filtering and pagination
+  // Server-side filtering and pagination reacting to route state
   finalPageData$ = combineLatest([
-    this.searchAction$,
-    this.selectedRegionAction$,
+    this.routeParams$,
     this.currentPageAction$,
   ]).pipe(
-    debounceTime(0),
-    tap(([search, region, page]) =>
-      console.log('Stream emitted:', { search, region, page }),
+    debounceTime(0), // Bundle emissions from queryParams + page reset
+    tap(([params, page]) =>
+      console.log('Stream emitted:', { ...params, page }),
     ),
-    switchMap(([search, region, page]) =>
+    switchMap(([{ search, region }, page]) =>
       this.countriesService
         .getAllCountries(
           search || undefined,
@@ -93,28 +115,42 @@ export class CountryListComponent implements OnInit {
     }),
   );
 
-  constructor(
-    private countriesService: CountriesService,
-    private titleService: Title,
-  ) {}
-
   ngOnInit(): void {
     this.pageTitle = this.titleService.getTitle();
+
+    // Update route when search input changes
+    this.searchFormControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((search) => {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { search: search || null },
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      });
   }
 
-  trackByFn(index: number, country: ICountry) {
+  protected trackByFn(index: number, country: ICountry) {
     return country.alpha3Code;
   }
 
-  onScroll() {
+  protected onScroll() {
     if (this.currentPageSubject.value < this.totalPages) {
       this.currentPageSubject.next(this.currentPageSubject.value + 1);
     }
   }
 
-  onRegionSelectionChanged(region: string) {
-    this.currentPageSubject.next(1); // Reset to page 1
-    this.selectedRegionSubject.next(region);
+  protected onRegionSelectionChanged(region: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { region: region === 'all' ? null : region },
+      queryParamsHandling: 'merge',
+    });
   }
 }
 
