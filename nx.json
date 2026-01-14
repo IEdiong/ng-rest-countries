@@ -44,7 +44,6 @@
       ]
     }
   },
-  "nxCloudId": "696273c8d331b40c3fffa354",
   "plugins": [
     {
       "plugin": "@nx/webpack/plugin",
