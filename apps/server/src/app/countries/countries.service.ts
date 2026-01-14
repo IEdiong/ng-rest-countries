@@ -128,8 +128,8 @@ export class CountriesService implements OnModuleInit {
     }
 
     // Pagination
-    const page = query.page || 1;
-    const limit = query.limit || 20;
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 20;
     const total = filtered.length;
     const totalPages = Math.ceil(total / limit);
     const offset = (page - 1) * limit;
