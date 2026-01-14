@@ -27,6 +27,7 @@
     "@nestjs/platform-express": "^10.0.2",
     "@ng-icons/core": "^25.2.0",
     "@ng-icons/ionicons": "^25.2.0",
+    "@ng-primitives/mcp": "^0.101.1",
     "@nx/angular": "20.1.4",
     "axios": "^1.6.0",
     "cache-manager": "^5.4.0",
