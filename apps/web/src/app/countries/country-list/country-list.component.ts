@@ -7,13 +7,15 @@ import {
   combineLatest,
   debounceTime,
   distinctUntilChanged,
+  map,
+  scan,
   switchMap,
   startWith,
   tap,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { ICountry } from '@rest-countries/shared';
+import { ICountry, PaginatedResponse } from '@rest-countries/shared';
 
 @Component({
   selector: 'rc-country-list',
@@ -25,6 +27,7 @@ export class CountryListComponent implements OnInit {
   pageSize = 20;
   pageTitle = '';
   errMessage = '';
+  totalPages = 0;
   searchFormControl = new FormControl('', { nonNullable: true });
 
   private currentPageSubject = new BehaviorSubject(1);
@@ -36,6 +39,7 @@ export class CountryListComponent implements OnInit {
     startWith(''),
     debounceTime(500),
     distinctUntilChanged(),
+    tap(() => this.currentPageSubject.next(1)),
   );
 
   // Server-side filtering and pagination
@@ -44,6 +48,7 @@ export class CountryListComponent implements OnInit {
     this.selectedRegionAction$,
     this.currentPageAction$,
   ]).pipe(
+    debounceTime(0),
     tap(([search, region, page]) =>
       console.log('Stream emitted:', { search, region, page }),
     ),
@@ -56,6 +61,7 @@ export class CountryListComponent implements OnInit {
           this.pageSize,
         )
         .pipe(
+          map((response) => ({ response, page })),
           catchError((err) => {
             this.errMessage = err;
             console.error('Error in getAllCountries:', err);
@@ -63,7 +69,28 @@ export class CountryListComponent implements OnInit {
           }),
         ),
     ),
-    tap((data) => console.log('Data received:', data)),
+    scan(
+      (acc: PaginatedResponse<ICountry>, curr) => {
+        if (curr.page === 1) {
+          return curr.response;
+        }
+        return {
+          ...curr.response,
+          items: [...acc.items, ...curr.response.items],
+        };
+      },
+      {
+        items: [],
+        total: 0,
+        page: 1,
+        limit: 20,
+        totalPages: 0,
+      } as PaginatedResponse<ICountry>,
+    ),
+    tap((data) => {
+      this.totalPages = data.totalPages;
+      console.log('Data received:', data);
+    }),
   );
 
   constructor(
@@ -73,9 +100,6 @@ export class CountryListComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageTitle = this.titleService.getTitle();
-    this.searchFormControl.valueChanges
-      .pipe(debounceTime(1000), distinctUntilChanged())
-      .subscribe();
   }
 
   trackByFn(index: number, country: ICountry) {
@@ -83,7 +107,9 @@ export class CountryListComponent implements OnInit {
   }
 
   onScroll() {
-    this.currentPageSubject.next(this.currentPageSubject.value + 1);
+    if (this.currentPageSubject.value < this.totalPages) {
+      this.currentPageSubject.next(this.currentPageSubject.value + 1);
+    }
   }
 
   onRegionSelectionChanged(region: string) {
