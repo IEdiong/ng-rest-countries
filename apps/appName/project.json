@@ -1,32 +1,26 @@
 {
-  "name": "web",
+  "name": "appName",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/web/src",
-  "prefix": "rc",
+  "prefix": "app",
+  "sourceRoot": "apps/appName/src",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/web",
-        "browser": "apps/web/src/main.ts",
-        "tsConfig": "apps/web/tsconfig.app.json",
+        "outputPath": "dist/apps/appName",
+        "browser": "apps/appName/src/main.ts",
+        "tsConfig": "apps/appName/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "polyfills": ["zone.js"],
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/web/public"
-          },
-          {
-            "glob": "_redirects",
-            "input": "apps/web/src",
-            "output": "/"
+            "input": "apps/appName/public"
           }
         ],
-        "styles": ["apps/web/src/styles.scss"],
-        "scripts": []
+        "styles": ["apps/appName/src/styles.scss"]
       },
       "configurations": {
         "production": {
@@ -47,13 +41,7 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true,
-          "fileReplacements": [
-            {
-              "replace": "apps/web/src/environments/environment.ts",
-              "with": "apps/web/src/environments/environment.development.ts"
-            }
-          ]
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production"
@@ -63,23 +51,16 @@
       "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "web:build:production"
+          "buildTarget": "appName:build:production"
         },
         "development": {
-          "buildTarget": "web:build:development"
+          "buildTarget": "appName:build:development"
         }
       },
-      "defaultConfiguration": "development",
-      "options": {
-        "buildTarget": "web:build:development",
-        "proxyConfig": "apps/web/proxy.conf.json"
-      }
+      "defaultConfiguration": "development"
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["apps/web/**/*.ts", "apps/web/**/*.html"]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@angular/build:unit-test",

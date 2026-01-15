@@ -18,7 +18,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": ["ES2022", "dom"],
+    "lib": ["dom", "ES2022"],
     "paths": {
       "@core/*": ["./apps/web/src/app/core/*"],
       "@countries/*": ["./apps/web/src/app/countries/*"],

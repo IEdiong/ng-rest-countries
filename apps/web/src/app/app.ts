@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { CountriesComponent } from '@countries/countries.component';
 import { HeaderComponent } from '@shared/header/header.component';
 
@@ -6,7 +6,6 @@ import { HeaderComponent } from '@shared/header/header.component';
   selector: 'rc-root',
   imports: [HeaderComponent, CountriesComponent],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './app.scss',
 })
 export class App {}
