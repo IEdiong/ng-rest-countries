@@ -33,21 +33,18 @@ jobs:
       - name: Build server app
         run: NODE_ENV=production npx nx build server --configuration=production
 
-      - name: List build output
-        run: |
-          echo "=== Netlify functions directory ==="
-          ls -la ./netlify/functions/ || echo "Directory not found"
-          echo "=== Server.js file size ==="
-          wc -c ./netlify/functions/server.js || echo "File not found"
-
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
           publish-dir: "./dist/apps/web/browser"
-          functions-dir: "./netlify/functions"
-          production-deploy: true
+          production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions - ${{ github.sha }}"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+          functions-dir: "./netlify/functions"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 10

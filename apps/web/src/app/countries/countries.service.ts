@@ -50,7 +50,7 @@ export class CountriesService {
       .pipe(
         map((response) => ({
           ...response,
-          items: this.sortCountries(response.items),
+          data: this.sortCountries(response.data),
         })),
         catchError(this.handleError),
       );
@@ -58,7 +58,7 @@ export class CountriesService {
 
   // Legacy support - returns all countries without pagination
   allCountries$ = this.getAllCountries(undefined, undefined, 1, 250).pipe(
-    map((response) => response.items),
+    map((response) => response.data),
   );
 
   countriesWithCodeName$ = this.allCountries$.pipe(
