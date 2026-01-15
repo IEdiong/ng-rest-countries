@@ -4,100 +4,109 @@
       &larr; <span class="ml-2">Back</span>
     </button>
 
-    <section
-      *ngIf="countryDetail$ | async as country; else loading"
-      class="relative mt-16 flex flex-col items-start overflow-hidden lg:mt-20 lg:flex-row lg:justify-between lg:gap-x-8"
-    >
-      <div
-        class="relative aspect-[560/401] max-w-[560px] flex-1 overflow-hidden rounded-[10px] shadow-flag"
+    @if (countryDetail$ | async; as country) {
+      <section
+        class="relative mt-16 flex flex-col items-start overflow-hidden lg:mt-20 lg:flex-row lg:justify-between lg:gap-x-8"
       >
-        <img
-          [src]="country.flag"
-          alt="flag of {{ country.name }}"
-          class="aspect-[560/401] h-full w-full object-cover"
-        />
-      </div>
-      <div class="max-w-[600px] flex-1 py-11 lg:py-[39px]">
-        <h1
-          class="text-[22px] font-extrabold leading-[30px] md:text-[32px] md:leading-[44px]"
-        >
-          {{ country.name }}
-        </h1>
-
         <div
-          class="mt-4 flex max-w-[510px] flex-col justify-between gap-x-3 gap-y-8 text-sm md:flex-row md:text-base lg:mt-[23px]"
+          class="relative aspect-[560/401] max-w-[560px] flex-1 overflow-hidden rounded-[10px] shadow-flag"
         >
-          <ul class="flex shrink-0 flex-col gap-2">
-            <li class="font-light">
-              <span class="font-semibold">Native Name:</span>
-              {{ country.nativeName }}
-            </li>
-            <li class="font-light">
-              <span class="font-semibold">Population:</span>
-              {{ country.population | number }}
-            </li>
-            <li class="font-light">
-              <span class="font-semibold">Region:</span>
-              {{ country.region }}
-            </li>
-            <li class="font-light">
-              <span class="font-semibold">Sub Region:</span>
-              {{ country.subregion }}
-            </li>
-            <li class="font-light">
-              <span class="font-semibold">Capital:</span>
-              <ng-container *ngIf="country.capital; else nil">
-                {{ country.capital }}
-              </ng-container>
-            </li>
-          </ul>
-          <ul class="flex w-fit flex-col gap-2">
-            <li class="font-light">
-              <span class="font-semibold">Top Level Domain:</span>
-              <ng-container *ngIf="country.topLevelDomain.length > 0; else nil">
-                {{ country.topLevelDomain[0] }}
-              </ng-container>
-            </li>
-            <li class="font-light">
-              <span class="font-semibold">Currencies:</span>
-              <ng-container *ngIf="country?.currencies; else nil">
-                {{ country.currencies[0].name }}
-              </ng-container>
-            </li>
-            <li class="font-light">
-              <span class="font-semibold">Languages:</span>
-              {{ languages }}
-            </li>
-          </ul>
+          <img
+            [src]="country.flag"
+            alt="flag of {{ country.name }}"
+            class="aspect-[560/401] h-full w-full object-cover"
+          />
         </div>
+        <div class="max-w-[600px] flex-1 py-11 lg:py-[39px]">
+          <h1
+            class="text-[22px] font-extrabold leading-[30px] md:text-[32px] md:leading-[44px]"
+          >
+            {{ country.name }}
+          </h1>
 
-        <div
-          class="mt-[68px] flex flex-wrap items-start gap-x-4 gap-y-4 md:flex-nowrap"
-        >
-          <p class="mt-1 shrink-0 font-semibold">Border Countries:</p>
-          <div class="flex flex-wrap items-stretch gap-[10px]">
-            <ng-container
-              *ngIf="
-                country.borderCountries && country.borderCountries.length > 0;
-                else noBorderCountries
-              "
-            >
-              <a
-                [routerLink]="[
-                  '/countries',
-                  borderCountry.alpha3Code.toLowerCase()
-                ]"
-                *ngFor="let borderCountry of country.borderCountries"
-                class="min-w-24 flex h-7 shrink-0 items-center justify-center rounded-sm px-[10px] text-sm font-light shadow-tag"
-              >
-                {{ borderCountry.name }}
-              </a>
-            </ng-container>
+          <div
+            class="mt-4 flex max-w-[510px] flex-col justify-between gap-x-3 gap-y-8 text-sm md:flex-row md:text-base lg:mt-[23px]"
+          >
+            <ul class="flex shrink-0 flex-col gap-2">
+              <li class="font-light">
+                <span class="font-semibold">Native Name:</span>
+                {{ country.nativeName }}
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Population:</span>
+                {{ country.population | number }}
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Region:</span>
+                {{ country.region }}
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Sub Region:</span>
+                {{ country.subregion }}
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Capital:</span>
+                @if (country.capital) {
+                  {{ country.capital }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+            </ul>
+            <ul class="flex w-fit flex-col gap-2">
+              <li class="font-light">
+                <span class="font-semibold">Top Level Domain:</span>
+                @if (country.topLevelDomain.length > 0) {
+                  {{ country.topLevelDomain[0] }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Currencies:</span>
+                @if (country?.currencies) {
+                  {{ country.currencies[0].name }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Languages:</span>
+                {{ languages }}
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="mt-[68px] flex flex-wrap items-start gap-x-4 gap-y-4 md:flex-nowrap"
+          >
+            <p class="mt-1 shrink-0 font-semibold">Border Countries:</p>
+            <div class="flex flex-wrap items-stretch gap-[10px]">
+              @if (
+                country.borderCountries && country.borderCountries.length > 0
+              ) {
+                @for (
+                  borderCountry of country.borderCountries;
+                  track borderCountry
+                ) {
+                  <a
+                    [routerLink]="[
+                      '/countries',
+                      borderCountry.alpha3Code.toLowerCase(),
+                    ]"
+                    class="flex h-7 min-w-24 shrink-0 items-center justify-center rounded-sm px-[10px] text-sm font-light shadow-tag"
+                  >
+                    {{ borderCountry.name }}
+                  </a>
+                }
+              } @else {
+                <span class="mt-1">No border countries</span>
+              }
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <ng-template #loading>
+      </section>
+    } @else {
       <section
         class="relative mt-16 flex w-full flex-col items-start overflow-hidden lg:mt-20 lg:flex-row lg:justify-between lg:gap-x-8"
       >
@@ -169,16 +178,8 @@
           </div>
         </div>
       </section>
-    </ng-template>
+    }
   </div>
 </main>
-
-<ng-template #noBorderCountries>
-  <span class="mt-1">No border countries</span>
-</ng-template>
-
-<ng-template #nil>
-  <span class="ms-1">Nil</span>
-</ng-template>
 
 <!-- TODO: 1. Handle edge case for when a property doesn't exist. For example: "Antarctica" -->

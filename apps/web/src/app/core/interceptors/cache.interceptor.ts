@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import {
   HttpRequest,
-  HttpHandler,
   HttpEvent,
-  HttpInterceptor,
   HttpContextToken,
   HttpResponse,
+  HttpHandlerFn,
 } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 import { CacheService } from '@core/services';
@@ -13,39 +12,27 @@ import { ICountry } from '@shared/interfaces';
 
 export const CACHING_ENABLED = new HttpContextToken<boolean>(() => false);
 
-@Injectable()
-export class CacheInterceptor implements HttpInterceptor {
-  constructor(private cacheService: CacheService) {}
+export function cachingInterceptor(
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn,
+): Observable<HttpEvent<unknown>> {
+  const cacheService = inject(CacheService);
 
-  intercept(
-    request: HttpRequest<ICountry[]>,
-    next: HttpHandler,
-  ): Observable<HttpEvent<ICountry[]>> {
-    console.log();
+  if (req.context.get(CACHING_ENABLED)) {
+    const cachedResponse = cacheService.get(req.urlWithParams);
 
-    // Check if ther request is cachable
-    if (!request.context.get(CACHING_ENABLED)) {
-      return next.handle(request);
-    }
-
-    // Get cached response from cache service
-    const cachedResponse = this.cacheService.get(request.urlWithParams);
-
-    // If cached response is available
     if (cachedResponse) {
-      // return cached response
-      // console.log(`Returning cached response`);
       return of(new HttpResponse({ body: cachedResponse }));
     }
 
-    // Else continue with request and cache the response
-    return next.handle(request).pipe(
-      // tap(() => console.log(`Getting response from server`)),
-      tap((event: HttpEvent<ICountry[]>) => {
+    return next(req).pipe(
+      tap((event: HttpEvent<unknown>) => {
         if (event instanceof HttpResponse && event.body !== null) {
-          this.cacheService.put(request.urlWithParams, event.body);
+          cacheService.put(req.urlWithParams, event.body as ICountry[]);
         }
       }),
     );
+  } else {
+    return next(req);
   }
 }

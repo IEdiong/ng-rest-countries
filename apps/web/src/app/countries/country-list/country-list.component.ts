@@ -23,9 +23,19 @@ import {
   tap,
 } from 'rxjs';
 import { CountriesService } from '../countries.service';
+import { ToolbarComponent } from '@shared/toolbar/toolbar.component';
+import { CountryComponent } from '@countries/country/country.component';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'rc-country-list',
+  imports: [
+    ToolbarComponent,
+    CountryComponent,
+    AsyncPipe,
+    InfiniteScrollDirective,
+  ],
   templateUrl: './country-list.component.html',
   styleUrls: ['./country-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -133,10 +143,6 @@ export class CountryListComponent implements OnInit {
           replaceUrl: true,
         });
       });
-  }
-
-  protected trackByFn(index: number, country: ICountry) {
-    return country.alpha3Code;
   }
 
   protected onScroll() {

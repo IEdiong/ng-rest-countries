@@ -5,20 +5,21 @@
       (click)="toggleTheme()"
       class="text-xs sm:text-base sm:leading-[22px]"
     >
-      <ng-icon
-        *ngIf="theme === 'light'"
-        name="ionMoonOutline"
-        class="-mt-[2px]"
-        aria-hidden="true"
-        size="1em"
-      ></ng-icon>
-      <ng-icon
-        *ngIf="theme === 'dark'"
-        name="ionSunny"
-        class="-mt-[2px]"
-        aria-hidden="true"
-        size="1em"
-      ></ng-icon>
+      @if (theme === 'light') {
+        <ng-icon
+          name="ionMoonOutline"
+          class="-mt-[2px]"
+          aria-hidden="true"
+          size="1em"
+        ></ng-icon>
+      } @else {
+        <ng-icon
+          name="ionSunny"
+          class="-mt-[2px]"
+          aria-hidden="true"
+          size="1em"
+        ></ng-icon>
+      }
       {{ theme === 'light' ? 'dark' : 'light' }} mode
     </button>
   </div>

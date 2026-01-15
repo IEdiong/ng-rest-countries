@@ -21,15 +21,13 @@
       <li class="mt-2">
         Capital:
         <span class="font-light">
-          <ng-container *ngIf="country.capital; else noCountry">{{
-            country.capital
-          }}</ng-container>
+          @if (country.capital) {
+            {{ country.capital }}
+          } @else {
+            No capital
+          }
         </span>
       </li>
     </ul>
   </div>
 </a>
-
-<ng-template #noCountry>
-  <span class="">No capital</span>
-</ng-template>

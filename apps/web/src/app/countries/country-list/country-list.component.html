@@ -3,33 +3,29 @@
     (regionSelected)="onRegionSelectionChanged($event)"
     [searchForm]="searchFormControl"
   ></rc-toolbar>
-  <div
-    *ngIf="finalPageData$ | async as response; else loading"
-    class="country-list-container"
-  >
-    <div class="country-list-grid">
-      <rc-country
-        *ngFor="let country of response.items; trackBy: trackByFn"
-        [country]="country"
-      ></rc-country>
-      <div
-        infiniteScroll
-        [infiniteScrollDistance]="1"
-        [infiniteScrollThrottle]="500"
-        (scrolled)="onScroll()"
-      ></div>
-    </div>
-  </div>
-  <ng-template #loading>
+  @if (finalPageData$ | async; as response) {
     <div class="country-list-container">
       <div class="country-list-grid">
+        @for (country of response.items; track country.alpha3Code) {
+          <rc-country [country]="country" />
+        }
         <div
-          *ngFor="let item of [1, 2, 3, 4, 5, 6, 7, 8]"
-          class="animate-pulse overflow-hidden rounded-[5px]"
-        >
-          <div class="h-[336px] w-full bg-slate-200 dark:bg-slate-700"></div>
-        </div>
+          infiniteScroll
+          [infiniteScrollDistance]="1"
+          [infiniteScrollThrottle]="500"
+          (scrolled)="onScroll()"
+        ></div>
       </div>
     </div>
-  </ng-template>
+  } @else {
+    <div class="country-list-container">
+      <div class="country-list-grid">
+        @for (item of [1, 2, 3, 4, 5, 6, 7, 8]; track item) {
+          <div class="animate-pulse overflow-hidden rounded-[5px]">
+            <div class="h-[336px] w-full bg-slate-200 dark:bg-slate-700"></div>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </main>

@@ -1,9 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ITheme } from '../interfaces/header.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { ionMoonOutline, ionSunny } from '@ng-icons/ionicons';
 
 @Component({
   selector: 'rc-header',
   templateUrl: './header.component.html',
+  imports: [NgIcon],
+  providers: [provideIcons({ ionMoonOutline, ionSunny })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
