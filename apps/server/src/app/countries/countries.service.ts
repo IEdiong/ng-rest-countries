@@ -33,7 +33,7 @@ interface RawCountryData {
 @Injectable()
 export class CountriesService implements OnModuleInit {
   private countries: ICountry[] = [];
-  private countryMap: Map<string, ICountry> = new Map();
+  private countryMap = new Map<string, ICountry>();
 
   onModuleInit() {
     this.loadCountries();
@@ -133,10 +133,10 @@ export class CountriesService implements OnModuleInit {
     const total = filtered.length;
     const totalPages = Math.ceil(total / limit);
     const offset = (page - 1) * limit;
-    const items = filtered.slice(offset, offset + limit);
+    const data = filtered.slice(offset, offset + limit);
 
     return {
-      items,
+      data,
       total,
       page,
       limit,

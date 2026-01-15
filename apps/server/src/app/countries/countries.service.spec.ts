@@ -48,15 +48,15 @@ describe('CountriesService', () => {
     it('should return correct pagination when passed number values', async () => {
       // page 1, limit 20 -> items 0-19
       const result1 = await service.findAll({ page: 1, limit: 20 });
-      expect(result1.items.length).toBe(20);
-      expect(result1.items[0].name).toBe('Country1');
-      expect(result1.items[19].name).toBe('Country20');
+      expect(result1.data.length).toBe(20);
+      expect(result1.data[0].name).toBe('Country1');
+      expect(result1.data[19].name).toBe('Country20');
 
       // page 2, limit 20 -> items 20-39
       const result2 = await service.findAll({ page: 2, limit: 20 });
-      expect(result2.items.length).toBe(20);
-      expect(result2.items[0].name).toBe('Country21');
-      expect(result2.items[19].name).toBe('Country40');
+      expect(result2.data.length).toBe(20);
+      expect(result2.data[0].name).toBe('Country21');
+      expect(result2.data[19].name).toBe('Country40');
     });
 
     it('should return correct pagination when passed string values (Bug Reproduction)', async () => {
@@ -73,9 +73,9 @@ describe('CountriesService', () => {
       // returns everything from 20 to end (30 items: 20-49)
 
       // We expect 20 items (20-39)
-      expect(result.items.length).toBe(20);
-      expect(result.items[0].name).toBe('Country21');
-      expect(result.items.length).not.toBe(30);
+      expect(result.data.length).toBe(20);
+      expect(result.data[0].name).toBe('Country21');
+      expect(result.data.length).not.toBe(30);
     });
   });
 });

@@ -108,11 +108,11 @@ export class CountryListComponent implements OnInit {
         }
         return {
           ...curr.response,
-          items: [...acc.items, ...curr.response.items],
+          data: [...acc.data, ...curr.response.data],
         };
       },
       {
-        items: [],
+        data: [],
         total: 0,
         page: 1,
         limit: 20,

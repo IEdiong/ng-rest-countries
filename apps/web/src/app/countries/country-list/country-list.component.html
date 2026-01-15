@@ -6,7 +6,7 @@
   @if (finalPageData$ | async; as response) {
     <div class="country-list-container">
       <div class="country-list-grid">
-        @for (country of response.items; track country.alpha3Code) {
+        @for (country of response.data; track country.alpha3Code) {
           <rc-country [country]="country" />
         }
         <div
