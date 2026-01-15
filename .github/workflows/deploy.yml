@@ -36,18 +36,17 @@ jobs:
       - name: Build server app
         run: NODE_ENV=production npx nx build server --configuration=production
 
+      - name: List build output
+        run: |
+          echo "=== Netlify functions directory ==="
+          ls -la ./netlify/functions/ || echo "Directory not found"
+          echo "=== Server.js file size ==="
+          wc -c ./netlify/functions/server.js || echo "File not found"
+
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3.0
-        with:
-          publish-dir: "./dist/apps/web/browser"
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: "Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
-          enable-pull-request-comment: true
-          enable-commit-comment: true
-          overwrites-pull-request-comment: true
-          functions-dir: "./netlify/functions"
+        run: |
+          npm install -g netlify-cli
+          netlify deploy --prod --dir=./dist/apps/web/browser --functions=./netlify/functions --message="Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 10
