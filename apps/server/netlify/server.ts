@@ -1,323 +1,235 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from '../src/app/app.module';
-import type { Context } from '@netlify/functions';
-import { INestApplication } from '@nestjs/common';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import express from 'express';
-import type { Express, Request, Response } from 'express';
+import type { Context, Config } from '@netlify/functions';
+import * as fs from 'fs';
+import * as path from 'path';
 
-let cachedApp: Express | null = null;
+// Load countries data
+let countriesData: any[] | null = null;
 
-async function bootstrapServer(): Promise<Express> {
-  if (cachedApp) {
-    return cachedApp;
+function loadCountries(): any[] {
+  if (!countriesData) {
+    const dataPath = path.join(__dirname, 'assets', 'countries.json');
+    const rawData = fs.readFileSync(dataPath, 'utf-8');
+    countriesData = JSON.parse(rawData);
   }
-
-  const expressApp = express();
-  const adapter = new ExpressAdapter(expressApp);
-
-  const app: INestApplication = await NestFactory.create(AppModule, adapter);
-  app.setGlobalPrefix('api');
-  app.enableCors();
-  await app.init();
-
-  cachedApp = expressApp;
-  return cachedApp;
+  return countriesData!;
 }
 
-async function handleNetlifyRequest(
-  req: Request,
-  _context: Context,
-): Promise<Response> {
-  const expressApp = await bootstrapServer();
-
-  // Netlify CLI passes rawUrl, production uses url
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rawUrl = (req as any).rawUrl || req.url;
-  
-  // Handle both full URLs and path-only URLs
-  let url: URL;
-  try {
-    url = new URL(rawUrl);
-  } catch {
-    // If URL parsing fails, it's likely a path-only URL
-    url = new URL(rawUrl, 'http://localhost');
-  }
-
-  // Parse request body if present
-  let body: string | undefined;
-  if (req.body) {
-    try {
-      body = await req.text();
-    } catch {
-      body = undefined;
-    }
-  }
-
-  return new Promise((resolve) => {
-    // Build headers object - handle both Headers instance and plain object
-    const headers: Record<string, string> = {};
-    const reqHeaders = req.headers;
-    
-    if (reqHeaders && typeof reqHeaders === 'object') {
-      if (typeof (reqHeaders as Headers).forEach === 'function') {
-        // Standard Headers object
-        (reqHeaders as Headers).forEach((value, key) => {
-          headers[key] = value;
-        });
-      } else {
-        // Plain object (Netlify CLI)
-        Object.entries(reqHeaders as unknown as Record<string, string>).forEach(([key, value]) => {
-          headers[key.toLowerCase()] = value;
-        });
-      }
-    }
-
-    // Strip the Netlify function path prefix to get the actual API path
-    let pathname = url.pathname;
-    const functionPathPrefix = '/.netlify/functions/server';
-    if (pathname.startsWith(functionPathPrefix)) {
-      pathname = pathname.slice(functionPathPrefix.length) || '/';
-    }
-
-    // Create Express-like request object
-    const mockReq = {
-      method: req.method,
-      url: pathname + url.search,
-      path: pathname,
-      originalUrl: pathname + url.search,
-      query: Object.fromEntries(url.searchParams),
-      headers,
-      body:
-        body && headers['content-type']?.includes('application/json')
-          ? JSON.parse(body)
-          : body,
-      get: (name: string) => headers[name.toLowerCase()],
-      header: (name: string) => headers[name.toLowerCase()],
-    } as unknown as ExpressRequest;
-
-    // Create Express-like response object
-    const chunks: Uint8Array[] = [];
-    let statusCode = 200;
-    const responseHeaders: Record<string, string> = {};
-
-    interface MockResponse {
-      statusCode: number;
-      status(code: number): this;
-      set(name: string, value: string): this;
-      setHeader(name: string, value: string): this;
-      getHeader(name: string): string | undefined;
-      write(chunk: string | Buffer): boolean;
-      end(chunk?: string | Buffer): void;
-      json(data: unknown): void;
-      send(data: string | Buffer | object): void;
-    }
-
-    const mockRes: MockResponse = {
-      statusCode: 200,
-      status(code: number) {
-        statusCode = code;
-        this.statusCode = code;
-        return this;
-      },
-      set(name: string, value: string) {
-        responseHeaders[name.toLowerCase()] = value;
-        return this;
-      },
-      setHeader(name: string, value: string) {
-        responseHeaders[name.toLowerCase()] = value;
-        return this;
-      },
-      getHeader(name: string) {
-        return responseHeaders[name.toLowerCase()];
-      },
-      write(chunk: string | Buffer) {
-        chunks.push(
-          typeof chunk === 'string'
-            ? new TextEncoder().encode(chunk)
-            : new Uint8Array(chunk),
-        );
-        return true;
-      },
-      end(chunk?: string | Buffer) {
-        if (chunk) {
-          chunks.push(
-            typeof chunk === 'string'
-              ? new TextEncoder().encode(chunk)
-              : new Uint8Array(chunk),
-          );
-        }
-
-        const totalLength = chunks.reduce((acc, c) => acc + c.length, 0);
-        const bodyBytes = new Uint8Array(totalLength);
-        let offset = 0;
-        for (const c of chunks) {
-          bodyBytes.set(c, offset);
-          offset += c.length;
-        }
-
-        resolve(
-          new Response(bodyBytes, {
-            status: statusCode,
-            headers: responseHeaders,
-          }),
-        );
-      },
-      json(data: unknown) {
-        responseHeaders['content-type'] = 'application/json';
-        this.end(JSON.stringify(data));
-      },
-      send(data: string | Buffer | object) {
-        if (typeof data === 'object' && !(data instanceof Buffer)) {
-          this.json(data);
-        } else {
-          this.end(data as string | Buffer);
-        }
-      },
-    };
-
-    // Pass to Express app
-    expressApp(mockReq, mockRes as unknown as ExpressResponse, () => {
-      resolve(new Response('Not Found', { status: 404 }));
-    });
-  });
+interface QueryParams {
+  page?: string;
+  limit?: string;
+  search?: string;
+  region?: string;
 }
 
-// Modern Netlify function format (default export)
-export default handleNetlifyRequest;
+function parseQueryParams(url: URL): QueryParams {
+  return {
+    page: url.searchParams.get('page') || undefined,
+    limit: url.searchParams.get('limit') || undefined,
+    search: url.searchParams.get('search') || undefined,
+    region: url.searchParams.get('region') || undefined,
+  };
+}
 
-// Legacy handler format for Netlify CLI compatibility
-// Returns object instead of Response for older Netlify runtime
-export const handler = async (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  event: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _context: any,
-) => {
-  const expressApp = await bootstrapServer();
+function filterCountries(countries: any[], search?: string, region?: string): any[] {
+  let filtered = countries;
 
-  // Extract URL from event (CLI vs production)
-  const rawUrl = event.rawUrl || event.path || '/';
-  let url: URL;
-  try {
-    url = new URL(rawUrl);
-  } catch {
-    url = new URL(rawUrl, 'http://localhost');
-  }
-
-  // Parse headers
-  const headers: Record<string, string> = {};
-  if (event.headers) {
-    Object.entries(event.headers as Record<string, string>).forEach(
-      ([key, value]) => {
-        headers[key.toLowerCase()] = value;
-      },
+  if (search) {
+    const searchLower = search.toLowerCase();
+    filtered = filtered.filter(
+      (country) =>
+        country.name?.common?.toLowerCase().includes(searchLower) ||
+        country.name?.official?.toLowerCase().includes(searchLower) ||
+        country.capital?.some((cap: string) => cap.toLowerCase().includes(searchLower))
     );
   }
 
-  // Parse body
-  let body = event.body;
-  if (body && event.isBase64Encoded) {
-    body = Buffer.from(body, 'base64').toString('utf-8');
+  if (region && region !== 'all') {
+    filtered = filtered.filter(
+      (country) => country.region?.toLowerCase() === region.toLowerCase()
+    );
   }
 
-  // Strip the Netlify function path prefix to get the actual API path
-  let pathname = url.pathname;
-  const functionPathPrefix = '/.netlify/functions/server';
-  if (pathname.startsWith(functionPathPrefix)) {
-    pathname = pathname.slice(functionPathPrefix.length) || '/';
-  }
+  return filtered;
+}
 
-  return new Promise((resolve) => {
-    const mockReq = {
-      method: event.httpMethod || 'GET',
-      url: pathname + url.search,
-      path: pathname,
-      originalUrl: pathname + url.search,
-      query: event.queryStringParameters || {},
-      headers,
-      body:
-        body && headers['content-type']?.includes('application/json')
-          ? JSON.parse(body)
-          : body,
-      get: (name: string) => headers[name.toLowerCase()],
-      header: (name: string) => headers[name.toLowerCase()],
-    } as unknown as ExpressRequest;
+function paginateCountries(countries: any[], page: number, limit: number) {
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + limit;
+  const paginatedData = countries.slice(startIndex, endIndex);
 
-    const chunks: string[] = [];
-    let statusCode = 200;
-    const responseHeaders: Record<string, string> = {};
+  return {
+    data: paginatedData,
+    meta: {
+      total: countries.length,
+      page,
+      limit,
+      totalPages: Math.ceil(countries.length / limit),
+    },
+  };
+}
 
-    interface LegacyMockResponse {
-      statusCode: number;
-      status(code: number): this;
-      set(name: string, value: string): this;
-      setHeader(name: string, value: string): this;
-      getHeader(name: string): string | undefined;
-      write(chunk: string | Buffer): boolean;
-      end(chunk?: string | Buffer): void;
-      json(data: unknown): void;
-      send(data: string | Buffer | object): void;
-    }
+function getCountryByCode(countries: any[], code: string): any | null {
+  const codeLower = code.toLowerCase();
+  return countries.find(
+    (country) =>
+      country.cca2?.toLowerCase() === codeLower ||
+      country.cca3?.toLowerCase() === codeLower ||
+      country.ccn3 === code
+  ) || null;
+}
 
-    const mockRes: LegacyMockResponse = {
-      statusCode: 200,
-      status(code: number) {
-        statusCode = code;
-        this.statusCode = code;
-        return this;
-      },
-      set(name: string, value: string) {
-        responseHeaders[name.toLowerCase()] = value;
-        return this;
-      },
-      setHeader(name: string, value: string) {
-        responseHeaders[name.toLowerCase()] = value;
-        return this;
-      },
-      getHeader(name: string) {
-        return responseHeaders[name.toLowerCase()];
-      },
-      write(chunk: string | Buffer) {
-        chunks.push(typeof chunk === 'string' ? chunk : chunk.toString('utf-8'));
-        return true;
-      },
-      end(chunk?: string | Buffer) {
-        if (chunk) {
-          chunks.push(
-            typeof chunk === 'string' ? chunk : chunk.toString('utf-8'),
-          );
-        }
+export default async (req: Request, context: Context): Promise<Response> => {
+  try {
+    const url = new URL(req.url);
+    const pathname = url.pathname;
 
-        resolve({
-          statusCode,
-          headers: responseHeaders,
-          body: chunks.join(''),
-        });
-      },
-      json(data: unknown) {
-        responseHeaders['content-type'] = 'application/json';
-        this.end(JSON.stringify(data));
-      },
-      send(data: string | Buffer | object) {
-        if (typeof data === 'object' && !(data instanceof Buffer)) {
-          this.json(data);
-        } else {
-          this.end(data as string | Buffer);
-        }
-      },
+    // CORS headers
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
     };
 
-    expressApp(mockReq, mockRes as unknown as ExpressResponse, () => {
-      resolve({
-        statusCode: 404,
-        body: 'Not Found',
-      });
-    });
-  });
+    // Handle OPTIONS preflight
+    if (req.method === 'OPTIONS') {
+      return new Response(null, { status: 204, headers });
+    }
+
+    // Load countries data
+    const countries = loadCountries();
+
+    // Route: GET /api or /api/
+    if (pathname === '/api' || pathname === '/api/') {
+      return new Response(
+        JSON.stringify({ message: 'Welcome to the Countries API' }),
+        { status: 200, headers }
+      );
+    }
+
+    // Route: GET /api/countries
+    if (pathname === '/api/countries' || pathname === '/api/countries/') {
+      const params = parseQueryParams(url);
+      const page = parseInt(params.page || '1', 10);
+      const limit = parseInt(params.limit || '20', 10);
+
+      const filtered = filterCountries(countries, params.search, params.region);
+      const result = paginateCountries(filtered, page, limit);
+
+      return new Response(JSON.stringify(result), { status: 200, headers });
+    }
+
+    // Route: GET /api/countries/:code
+    const countryMatch = pathname.match(/^\/api\/countries\/([^/]+)$/);
+    if (countryMatch) {
+      const code = countryMatch[1];
+      const country = getCountryByCode(countries, code);
+
+      if (country) {
+        return new Response(JSON.stringify(country), { status: 200, headers });
+      } else {
+        return new Response(
+          JSON.stringify({ error: 'Country not found' }),
+          { status: 404, headers }
+        );
+      }
+    }
+
+    // 404 for unknown routes
+    return new Response(
+      JSON.stringify({ error: 'Not found' }),
+      { status: 404, headers }
+    );
+  } catch (error) {
+    console.error('Function error:', error);
+    return new Response(
+      JSON.stringify({ error: 'Internal server error', details: String(error) }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
 };
 
-// Netlify function config for routing
-export const config = {
+export const config: Config = {
   path: ['/api', '/api/*'],
+};
+
+// Legacy handler export for Netlify CLI compatibility
+export const handler = async (event: any, context: any) => {
+  try {
+    const url = new URL(event.rawUrl || event.path || '/', 'http://localhost');
+    const pathname = url.pathname;
+
+    // Strip function path prefix if present
+    const cleanPath = pathname.replace(/^\/.netlify\/functions\/server/, '') || '/';
+    
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    };
+
+    if (event.httpMethod === 'OPTIONS') {
+      return { statusCode: 204, headers, body: '' };
+    }
+
+    const countries = loadCountries();
+
+    if (cleanPath === '/api' || cleanPath === '/api/') {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ message: 'Welcome to the Countries API' }),
+      };
+    }
+
+    if (cleanPath === '/api/countries' || cleanPath === '/api/countries/') {
+      const page = parseInt(url.searchParams.get('page') || event.queryStringParameters?.page || '1', 10);
+      const limit = parseInt(url.searchParams.get('limit') || event.queryStringParameters?.limit || '20', 10);
+      const search = url.searchParams.get('search') || event.queryStringParameters?.search;
+      const region = url.searchParams.get('region') || event.queryStringParameters?.region;
+
+      const filtered = filterCountries(countries, search, region);
+      const result = paginateCountries(filtered, page, limit);
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(result),
+      };
+    }
+
+    const countryMatch = cleanPath.match(/^\/api\/countries\/([^/]+)$/);
+    if (countryMatch) {
+      const code = countryMatch[1];
+      const country = getCountryByCode(countries, code);
+
+      if (country) {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(country),
+        };
+      } else {
+        return {
+          statusCode: 404,
+          headers,
+          body: JSON.stringify({ error: 'Country not found' }),
+        };
+      }
+    }
+
+    return {
+      statusCode: 404,
+      headers,
+      body: JSON.stringify({ error: 'Not found' }),
+    };
+  } catch (error) {
+    console.error('Function error:', error);
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Internal server error', details: String(error) }),
+    };
+  }
 };

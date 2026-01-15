@@ -1,12 +1,11 @@
 [build]
   base = "/"
   publish = "dist/apps/web/browser"
-  command = "npm install && npx nx build web --configuration=production && NODE_ENV=production npx nx build server --configuration=production && cd netlify/functions/server && npm install"
+  command = "npm install && npx nx build web --configuration=production && NODE_ENV=production npx nx build server --configuration=production"
   ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF apps/server/"
 
 [functions]
   directory = "netlify/functions"
-  node_bundler = "none"
 
 [build.environment]
   NODE_VERSION = "22"
