@@ -64,7 +64,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/server-e2e/**/*", "apps/backend-e2e/**/*"]
+      "exclude": ["apps/server-e2e/**/*"]
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AsyncPipe, DecimalPipe, Location } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
 
 import { CountriesService } from '../countries.service';
 import { map, switchMap, tap } from 'rxjs';
@@ -14,10 +14,11 @@ import { Title } from '@angular/platform-browser';
 })
 export class CountryDetailComponent {
   protected languages = '';
+  protected currencies = '';
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly countriesService = inject(CountriesService);
-  private readonly location = inject(Location);
   private readonly titleService = inject(Title);
+  private readonly router = inject(Router);
 
   countryDetail$ = this.activatedRoute.params.pipe(
     map((param) => param['countryCode']),
@@ -26,11 +27,14 @@ export class CountryDetailComponent {
     ),
     tap((country) => {
       this.languages = country.languages.map((lang) => lang.name).join(', ');
+      this.currencies = country.currencies
+        .map((currency) => currency.name)
+        .join(', ');
       this.titleService.setTitle(`Countries of the world | ${country.name}`);
     }),
   );
 
-  onBack(): void {
-    this.location.back();
+  protected onBack(): void {
+    this.router.navigate(['/countries']);
   }
 }

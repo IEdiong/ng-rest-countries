@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { CountryListComponent } from '@countries/country-list/country-list.component';
 
 export const routes: Routes = [
   {
@@ -10,7 +9,13 @@ export const routes: Routes = [
   {
     path: 'countries',
     children: [
-      { path: '', component: CountryListComponent },
+      {
+        path: '',
+        loadComponent: () =>
+          import('@countries/country-list/country-list.component').then(
+            (m) => m.CountryListComponent,
+          ),
+      },
       {
         path: ':countryCode',
         loadComponent: () =>

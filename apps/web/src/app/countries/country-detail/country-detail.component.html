@@ -30,19 +30,35 @@
             <ul class="flex shrink-0 flex-col gap-2">
               <li class="font-light">
                 <span class="font-semibold">Native Name:</span>
-                {{ country.nativeName }}
+                @if (country.nativeName) {
+                  {{ country.nativeName }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
               </li>
               <li class="font-light">
                 <span class="font-semibold">Population:</span>
-                {{ country.population | number }}
+                @if (country.population) {
+                  {{ country.population | number }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
               </li>
               <li class="font-light">
                 <span class="font-semibold">Region:</span>
-                {{ country.region }}
+                @if (country.region) {
+                  {{ country.region }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
               </li>
               <li class="font-light">
                 <span class="font-semibold">Sub Region:</span>
-                {{ country.subregion }}
+                @if (country.subregion) {
+                  {{ country.subregion }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
               </li>
               <li class="font-light">
                 <span class="font-semibold">Capital:</span>
@@ -64,15 +80,19 @@
               </li>
               <li class="font-light">
                 <span class="font-semibold">Currencies:</span>
-                @if (country?.currencies) {
-                  {{ country.currencies[0].name }}
+                @if (country?.currencies && country.currencies.length > 0) {
+                  {{ currencies }}
                 } @else {
                   <span class="ms-1">Nil</span>
                 }
               </li>
               <li class="font-light">
                 <span class="font-semibold">Languages:</span>
-                {{ languages }}
+                @if (country?.languages && country.languages.length > 0) {
+                  {{ languages }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
               </li>
             </ul>
           </div>
@@ -87,7 +107,7 @@
               ) {
                 @for (
                   borderCountry of country.borderCountries;
-                  track borderCountry
+                  track borderCountry.alpha3Code
                 ) {
                   <a
                     [routerLink]="[
