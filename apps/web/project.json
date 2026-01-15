@@ -89,9 +89,9 @@
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "appName:build",
+        "buildTarget": "web:build",
         "port": 4200,
-        "staticFilePath": "dist/apps/appName/browser",
+        "staticFilePath": "dist/apps/web/browser",
         "spa": true
       }
     }
