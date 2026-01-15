@@ -1,0 +1,8 @@
+<div class="country-list-container px-4 py-6 sm:px-6 sm:py-12">
+  <div
+    class="relative flex flex-col gap-x-6 gap-y-10 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <rc-searchbar [searchControl]="searchForm"></rc-searchbar>
+    <rc-filter (regionSelected)="selectRegion($event)"></rc-filter>
+  </div>
+</div>

@@ -1,0 +1,205 @@
+<main class="py-10 lg:py-20">
+  <div class="container max-w-[1328px] px-7 lg:px-6">
+    <button (click)="onBack()" class="rounded-md px-8 py-2 shadow-back">
+      &larr; <span class="ml-2">Back</span>
+    </button>
+
+    @if (countryDetail$ | async; as country) {
+      <section
+        class="relative mt-16 flex flex-col items-start overflow-hidden lg:mt-20 lg:flex-row lg:justify-between lg:gap-x-8"
+      >
+        <div
+          class="relative aspect-[560/401] max-w-[560px] flex-1 overflow-hidden rounded-[10px] shadow-flag"
+        >
+          <img
+            [src]="country.flag"
+            alt="flag of {{ country.name }}"
+            class="aspect-[560/401] h-full w-full object-cover"
+          />
+        </div>
+        <div class="max-w-[600px] flex-1 py-11 lg:py-[39px]">
+          <h1
+            class="text-[22px] font-extrabold leading-[30px] md:text-[32px] md:leading-[44px]"
+          >
+            {{ country.name }}
+          </h1>
+
+          <div
+            class="mt-4 flex max-w-[510px] flex-col justify-between gap-x-3 gap-y-8 text-sm md:flex-row md:text-base lg:mt-[23px]"
+          >
+            <ul class="flex shrink-0 flex-col gap-2">
+              <li class="font-light">
+                <span class="font-semibold">Native Name:</span>
+                @if (country.nativeName) {
+                  {{ country.nativeName }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Population:</span>
+                @if (country.population) {
+                  {{ country.population | number }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Region:</span>
+                @if (country.region) {
+                  {{ country.region }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Sub Region:</span>
+                @if (country.subregion) {
+                  {{ country.subregion }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Capital:</span>
+                @if (country.capital) {
+                  {{ country.capital }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+            </ul>
+            <ul class="flex w-fit flex-col gap-2">
+              <li class="font-light">
+                <span class="font-semibold">Top Level Domain:</span>
+                @if (country.topLevelDomain.length > 0) {
+                  {{ country.topLevelDomain[0] }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Currencies:</span>
+                @if (country?.currencies && country.currencies.length > 0) {
+                  {{ currencies }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+              <li class="font-light">
+                <span class="font-semibold">Languages:</span>
+                @if (country?.languages && country.languages.length > 0) {
+                  {{ languages }}
+                } @else {
+                  <span class="ms-1">Nil</span>
+                }
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="mt-[68px] flex flex-wrap items-start gap-x-4 gap-y-4 md:flex-nowrap"
+          >
+            <p class="mt-1 shrink-0 font-semibold">Border Countries:</p>
+            <div class="flex flex-wrap items-stretch gap-[10px]">
+              @if (
+                country.borderCountries && country.borderCountries.length > 0
+              ) {
+                @for (
+                  borderCountry of country.borderCountries;
+                  track borderCountry.alpha3Code
+                ) {
+                  <a
+                    [routerLink]="[
+                      '/countries',
+                      borderCountry.alpha3Code.toLowerCase(),
+                    ]"
+                    class="flex h-7 min-w-24 shrink-0 items-center justify-center rounded-sm px-[10px] text-sm font-light shadow-tag"
+                  >
+                    {{ borderCountry.name }}
+                  </a>
+                }
+              } @else {
+                <span class="mt-1">No border countries</span>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+    } @else {
+      <section
+        class="relative mt-16 flex w-full flex-col items-start overflow-hidden lg:mt-20 lg:flex-row lg:justify-between lg:gap-x-8"
+      >
+        <div
+          class="relative aspect-[560/401] w-full max-w-[560px] flex-1 animate-pulse overflow-hidden rounded-[10px] shadow-flag"
+        >
+          <div class="h-full w-full bg-slate-200 dark:bg-slate-700"></div>
+        </div>
+        <div class="w-full max-w-[600px] flex-1 py-11 lg:py-[39px]">
+          <div
+            class="h-[30px] w-1/3 rounded-full bg-slate-200 dark:bg-slate-700"
+          ></div>
+
+          <div
+            class="mt-4 flex max-w-[510px] flex-col justify-between gap-x-3 gap-y-8 text-sm md:flex-row md:text-base lg:mt-[23px]"
+          >
+            <ul class="flex w-[50%] shrink-0 flex-col gap-2">
+              <li class="font-light">
+                <div
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+                ></div>
+              </li>
+              <li class="font-light">
+                <div
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+                ></div>
+              </li>
+              <li class="font-light">
+                <div
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+                ></div>
+              </li>
+              <li class="font-light">
+                <div
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+                ></div>
+              </li>
+              <li class="font-light">
+                <div
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+                ></div>
+              </li>
+            </ul>
+            <ul class="flex w-[40%] flex-col gap-2">
+              <li class="font-light">
+                <div
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+                ></div>
+              </li>
+              <li class="font-light">
+                <div
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+                ></div>
+              </li>
+              <li class="font-light">
+                <div
+                  class="h-[24px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+                ></div>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="mt-[68px] flex flex-wrap items-start gap-x-4 gap-y-4 md:flex-nowrap"
+          >
+            <div
+              class="h-[34px] w-full rounded-full bg-slate-200 dark:bg-slate-700"
+            ></div>
+          </div>
+        </div>
+      </section>
+    }
+  </div>
+</main>
+
+<!-- TODO: 1. Handle edge case for when a property doesn't exist. For example: "Antarctica" -->

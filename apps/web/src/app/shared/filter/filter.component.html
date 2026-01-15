@@ -1,0 +1,52 @@
+<div
+  class="relative w-[200px] text-left"
+  [(ngpSelectValue)]="selectedRegion"
+  (ngpSelectValueChange)="onRegionSelected($event)"
+  ngpSelect
+>
+  <button
+    type="button"
+    class="inline-flex h-14 w-[200px] items-center justify-between rounded-[5px] bg-white py-[18px] pe-[22px] ps-6 shadow-filter hover:bg-gray-50 dark:bg-dark-blue"
+  >
+    @if (selectedRegion(); as region) {
+      <span class="text-sm font-normal">{{ region }}</span>
+    } @else {
+      <span class="text-sm font-normal">Filter by Region</span>
+    }
+
+    <svg
+      class="h-3 w-3 fill-black dark:fill-white"
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M9.45 3.45L6 6.9L2.55 3.45L1.5 4.5L6 9L10.5 4.5L9.45 3.45Z"
+        fill="current-color"
+      />
+    </svg>
+  </button>
+
+  <div
+    *ngpSelectPortal
+    ngpSelectDropdown
+    class="absolute top-[140px] mt-2 h-[164px] w-[200px] origin-top rounded-[5px] bg-white shadow-filter dark:bg-dark-blue sm:-right-[0.5px] sm:top-14 sm:mt-1"
+  >
+    <div class="flex h-full flex-col justify-between py-4">
+      @for (region of regions; track region) {
+        <div
+          [ngpSelectOptionValue]="region"
+          ngpSelectOption
+          class="flex h-full w-full flex-1 cursor-pointer items-center px-6 text-left text-sm font-normal transition-all ease-in-out hover:bg-gray-100 hover:pl-8 hover:text-gray-900 dark:hover:bg-lighter-blue dark:hover:text-white"
+        >
+          {{ region }}
+        </div>
+      }
+    </div>
+  </div>
+</div>

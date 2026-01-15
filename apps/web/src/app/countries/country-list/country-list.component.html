@@ -1,0 +1,31 @@
+<main class="pb-10">
+  <rc-toolbar
+    (regionSelected)="onRegionSelectionChanged($event)"
+    [searchForm]="searchFormControl"
+  ></rc-toolbar>
+  @if (finalPageData$ | async; as response) {
+    <div class="country-list-container">
+      <div class="country-list-grid">
+        @for (country of response.items; track country.alpha3Code) {
+          <rc-country [country]="country" />
+        }
+        <div
+          infiniteScroll
+          [infiniteScrollDistance]="1"
+          [infiniteScrollThrottle]="500"
+          (scrolled)="onScroll()"
+        ></div>
+      </div>
+    </div>
+  } @else {
+    <div class="country-list-container">
+      <div class="country-list-grid">
+        @for (item of [1, 2, 3, 4, 5, 6, 7, 8]; track item) {
+          <div class="animate-pulse overflow-hidden rounded-[5px]">
+            <div class="h-[336px] w-full bg-slate-200 dark:bg-slate-700"></div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</main>

@@ -40,3 +40,20 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# AI
+.github/tasks/*
+
+# Nx
+.nx/cache
+.nx/workspace-data
+
+# Secrets
+.env
+.env.*
+.angular
+
+# Netlify
+.netlify/
+
+__screenshots__/

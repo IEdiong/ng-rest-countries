@@ -1,0 +1,33 @@
+<a [routerLink]="[country.alpha3Code.toLowerCase()]" class="country-card">
+  <div class="card-image">
+    <img
+      class="w-full object-cover"
+      [src]="country.flag"
+      alt="germany flag"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+  <div class="card-body">
+    <h2 class="card-title">{{ country.name }}</h2>
+    <ul class="card-info">
+      <li>
+        Population:
+        <span class="font-light">{{ country.population | number }}</span>
+      </li>
+      <li class="mt-2">
+        Region: <span class="font-light">{{ country.region }}</span>
+      </li>
+      <li class="mt-2">
+        Capital:
+        <span class="font-light">
+          @if (country.capital) {
+            {{ country.capital }}
+          } @else {
+            No capital
+          }
+        </span>
+      </li>
+    </ul>
+  </div>
+</a>
