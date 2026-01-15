@@ -12,6 +12,8 @@ module.exports = {
     filename: "server.js",
     libraryTarget: isProduction ? "commonjs2" : undefined,
   },
+  // Bundle all dependencies for serverless - don't treat tslib as external
+  externals: isProduction ? [] : undefined,
   plugins: [
     new NxAppWebpackPlugin({
       target: "node",
@@ -22,6 +24,7 @@ module.exports = {
       optimization: false,
       outputHashing: "none",
       generatePackageJson: false,
+      externalDependencies: isProduction ? 'none' : 'all',
     }),
   ],
 };
