@@ -1,17 +1,13 @@
 import type { Context, Config } from '@netlify/functions';
-import * as fs from 'fs';
-import * as path from 'path';
 
-// Load countries data
-let countriesData: any[] | null = null;
+// Import countries data directly (bundled by webpack)
+import countriesJson from '../src/assets/countries.json';
+
+// Countries data
+const countriesData: any[] = countriesJson as any[];
 
 function loadCountries(): any[] {
-  if (!countriesData) {
-    const dataPath = path.join(__dirname, 'assets', 'countries.json');
-    const rawData = fs.readFileSync(dataPath, 'utf-8');
-    countriesData = JSON.parse(rawData);
-  }
-  return countriesData!;
+  return countriesData;
 }
 
 interface QueryParams {
@@ -81,7 +77,13 @@ function getCountryByCode(countries: any[], code: string): any | null {
 export default async (req: Request, context: Context): Promise<Response> => {
   try {
     const url = new URL(req.url);
-    const pathname = url.pathname;
+    let pathname = url.pathname;
+    
+    // Remove the Netlify function path prefix if present
+    const functionPrefix = '/.netlify/functions/server';
+    if (pathname.startsWith(functionPrefix)) {
+      pathname = pathname.substring(functionPrefix.length) || '/';
+    }
 
     // CORS headers
     const headers = {
@@ -137,7 +139,7 @@ export default async (req: Request, context: Context): Promise<Response> => {
 
     // 404 for unknown routes
     return new Response(
-      JSON.stringify({ error: 'Not found' }),
+      JSON.stringify({ error: 'Not found', path: pathname }),
       { status: 404, headers }
     );
   } catch (error) {
