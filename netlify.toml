@@ -10,7 +10,20 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# SPA fallback - API routes handled by function config
+# API routes - must come BEFORE the SPA fallback
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api"
+  to = "/.netlify/functions/server"
+  status = 200
+  force = true
+
+# SPA fallback - catch all other routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
