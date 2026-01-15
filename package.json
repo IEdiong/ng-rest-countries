@@ -9,7 +9,7 @@
     "test": "nx test",
     "lint": "nx lint",
     "lint:fix": "nx lint --fix",
-    "prepare": "husky install"
+    "prepare": "husky || true"
   },
   "private": true,
   "dependencies": {
