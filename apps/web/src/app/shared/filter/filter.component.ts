@@ -1,41 +1,39 @@
-import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   OnInit,
   Output,
+  signal,
 } from '@angular/core';
+import {
+  NgpSelect,
+  NgpSelectDropdown,
+  NgpSelectOption,
+  NgpSelectPortal,
+} from 'ng-primitives/select';
 
 @Component({
   selector: 'rc-filter',
   templateUrl: './filter.component.html',
-  imports: [NgClass],
+  imports: [NgpSelect, NgpSelectDropdown, NgpSelectOption, NgpSelectPortal],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterComponent implements OnInit {
   regions: string[] = [];
-  menuIsOpen = false;
+  selectedRegion = signal<string | undefined>(undefined);
   @Output() regionSelected = new EventEmitter<string>();
 
   ngOnInit(): void {
     this.regions = ['Africa', 'America', 'Asia', 'Europe', 'Oceania'];
   }
 
-  toggleMenu() {
-    this.menuIsOpen = !this.menuIsOpen;
-    // console.log('menu is toggled');
-  }
-
-  onRegionSelected(region: MouseEvent): void {
-    const el = region.target as HTMLElement;
-    const selectedRegion = el.textContent?.trim().toLowerCase();
-
-    // console.log(selectedRegion);
-    if (selectedRegion === 'america') {
+  onRegionSelected(region: string): void {
+    // console.log(region);
+    if (region.toLowerCase() === 'america') {
       this.regionSelected.emit('americas');
     } else {
-      this.regionSelected.emit(selectedRegion);
+      this.regionSelected.emit(region.toLowerCase());
     }
   }
 }

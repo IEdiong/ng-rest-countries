@@ -1,14 +1,18 @@
-<div class="relative w-[200px] text-left">
+<div
+  class="relative w-[200px] text-left"
+  [(ngpSelectValue)]="selectedRegion"
+  (ngpSelectValueChange)="onRegionSelected($event)"
+  ngpSelect
+>
   <button
-    (click)="toggleMenu()"
     type="button"
     class="inline-flex h-14 w-[200px] items-center justify-between rounded-[5px] bg-white py-[18px] pe-[22px] ps-6 shadow-filter hover:bg-gray-50 dark:bg-dark-blue"
-    id="filter-button"
-    aria-haspopup="true"
-    aria-expanded="false"
-    aria-controls="menu-content"
   >
-    <span class="text-sm font-normal">Filter by Region</span>
+    @if (selectedRegion(); as region) {
+      <span class="text-sm font-normal">{{ region }}</span>
+    } @else {
+      <span class="text-sm font-normal">Filter by Region</span>
+    }
 
     <svg
       class="h-3 w-3 fill-black dark:fill-white"
@@ -28,36 +32,21 @@
     </svg>
   </button>
 
-  @if (menuIsOpen) {
-    <ul
-      class="absolute top-[140px] mt-2 h-[164px] w-[200px] origin-top rounded-[5px] bg-white shadow-filter transition-opacity duration-1000 ease-out dark:bg-dark-blue sm:-right-[0.5px] sm:top-14 sm:mt-1"
-      [ngClass]="
-        menuIsOpen
-          ? ' z-10 h-[164px] transform opacity-100'
-          : 'z-0 h-0 origin-top overflow-hidden'
-      "
-      id="menu-content"
-      role="menu"
-      aria-orientation="vertical"
-      aria-labelledby="filter-button"
-      role="menu"
-      tabIndex="-1"
-    >
-      <div class="flex h-full flex-col justify-between py-4" role="none">
-        @for (region of regions; track region) {
-          <li role="presentation" class="flex-1">
-            <button
-              (click)="onRegionSelected($event)"
-              class="block h-full w-full px-6 text-left text-sm font-normal transition-all ease-in-out hover:bg-gray-100 hover:pl-8 hover:text-gray-900 dark:hover:bg-lighter-blue dark:hover:text-white"
-              role="menuitem"
-              tabIndex="-1"
-              id="menu-item-0"
-            >
-              {{ region }}
-            </button>
-          </li>
-        }
-      </div>
-    </ul>
-  }
+  <div
+    *ngpSelectPortal
+    ngpSelectDropdown
+    class="absolute top-[140px] mt-2 h-[164px] w-[200px] origin-top rounded-[5px] bg-white shadow-filter dark:bg-dark-blue sm:-right-[0.5px] sm:top-14 sm:mt-1"
+  >
+    <div class="flex h-full flex-col justify-between py-4">
+      @for (region of regions; track region) {
+        <div
+          [ngpSelectOptionValue]="region"
+          ngpSelectOption
+          class="flex h-full w-full flex-1 cursor-pointer items-center px-6 text-left text-sm font-normal transition-all ease-in-out hover:bg-gray-100 hover:pl-8 hover:text-gray-900 dark:hover:bg-lighter-blue dark:hover:text-white"
+        >
+          {{ region }}
+        </div>
+      }
+    </div>
+  </div>
 </div>

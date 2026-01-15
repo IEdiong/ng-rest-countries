@@ -81,9 +81,9 @@ export class CountryListComponent implements OnInit {
     this.currentPageAction$,
   ]).pipe(
     debounceTime(0), // Bundle emissions from queryParams + page reset
-    tap(([params, page]) =>
-      console.log('Stream emitted:', { ...params, page }),
-    ),
+    // tap(([params, page]) =>
+    //   console.log('Stream emitted:', { ...params, page }),
+    // ),
     switchMap(([{ search, region }, page]) =>
       this.countriesService
         .getAllCountries(
@@ -121,7 +121,7 @@ export class CountryListComponent implements OnInit {
     ),
     tap((data) => {
       this.totalPages = data.totalPages;
-      console.log('Data received:', data);
+      // console.log('Data received:', data);
     }),
   );
 
