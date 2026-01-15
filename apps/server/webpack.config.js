@@ -8,7 +8,7 @@ module.exports = {
     path: isProduction
       ? join(__dirname, "../../.netlify/functions-serve")
       : join(__dirname, "../../dist/apps/server"),
-    filename: isProduction ? "server/server.js" : "main.js",
+    filename: isProduction ? "server.js" : "main.js",
     libraryTarget: isProduction ? "commonjs2" : undefined,
   },
   plugins: [
