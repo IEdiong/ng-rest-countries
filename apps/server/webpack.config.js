@@ -7,13 +7,11 @@ const isProduction = process.env.NODE_ENV === "production";
 module.exports = {
   output: {
     path: isProduction
-      ? join(__dirname, "../../netlify/functions/server")
+      ? join(__dirname, "../../netlify/functions")  // ✅ Changed:  output directly to functions directory
       : join(__dirname, "../../dist/apps/server"),
-    filename: "server.js",
+    filename: "server.js",  // ✅ This will create netlify/functions/server.js
     libraryTarget: isProduction ? "commonjs2" : undefined,
   },
-  // Bundle all dependencies for serverless - don't treat tslib as external
-  externals: isProduction ? [] : undefined,
   plugins: [
     new NxAppWebpackPlugin({
       target: "node",
@@ -24,7 +22,6 @@ module.exports = {
       optimization: false,
       outputHashing: "none",
       generatePackageJson: false,
-      externalDependencies: isProduction ? 'none' : 'all',
     }),
   ],
 };
