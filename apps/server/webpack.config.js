@@ -1,15 +1,14 @@
 const { NxAppWebpackPlugin } = require("@nx/webpack/app-plugin");
-const { join } = require("path");
-const fs = require("fs");
+const path = require("path");
 
 const isProduction = process.env.NODE_ENV === "production";
 
 module.exports = {
   output: {
     path: isProduction
-      ? join(__dirname, "../../netlify/functions")  // ✅ Changed:  output directly to functions directory
-      : join(__dirname, "../../dist/apps/server"),
-    filename: "server.js",  // ✅ This will create netlify/functions/server.js
+      ? path.resolve(__dirname, "../../netlify/functions") // ✅ Changed:  output directly to functions directory
+      : path.resolve(__dirname, "../../dist/apps/server"),
+    filename: isProduction ? "server.js" : "main.js", // ✅ This will create netlify/functions/server.js
     libraryTarget: isProduction ? "commonjs2" : undefined,
   },
   plugins: [

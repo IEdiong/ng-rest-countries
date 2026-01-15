@@ -9,8 +9,7 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "webpack-cli build",
-        "cwd": "apps/server"
+        "command": "webpack-cli build"
       },
       "configurations": {
         "development": {
