@@ -34,7 +34,6 @@
     "@ng-primitives/mcp": "^0.101.1",
     "@swc-node/register": "^1.11.1",
     "@swc/core": "^1.15.8",
-    "@swc/core-darwin-arm64": "^1.15.8",
     "axios": "^1.6.0",
     "cache-manager": "^6",
     "ngx-infinite-scroll": "^21.0.0",
