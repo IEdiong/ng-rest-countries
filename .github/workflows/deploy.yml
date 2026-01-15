@@ -37,11 +37,7 @@ jobs:
         run: NODE_ENV=production npx nx build server --configuration=production
 
       - name: Install function dependencies
-        run: |
-          cd netlify/functions/server
-          # Fix main entry point in package.json
-          sed -i 's/"main": "main.js"/"main": "server.js"/' package.json
-          npm install
+        run: cd netlify/functions/server && npm install
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0

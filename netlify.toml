@@ -1,7 +1,7 @@
 [build]
   base = "/"
   publish = "dist/apps/web/browser"
-  command = "npm install && npx nx build web --configuration=production && NODE_ENV=production npx nx build server --configuration=production && cd netlify/functions/server && sed -i 's/\"main\": \"main.js\"/\"main\": \"server.js\"/' package.json && npm install"
+  command = "npm install && npx nx build web --configuration=production && NODE_ENV=production npx nx build server --configuration=production && cd netlify/functions/server && npm install"
   ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF apps/server/"
 
 [functions]
