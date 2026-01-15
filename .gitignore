@@ -55,6 +55,6 @@ Thumbs.db
 
 # Netlify
 .netlify/
-netlify/functions/
+netlify/functions/server/
 
 __screenshots__/
