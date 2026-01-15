@@ -2,14 +2,15 @@
   base = "/"
   publish = "dist/apps/web/browser"
   command = "npm install && npx nx build web --configuration=production && npx nx build server --configuration=production"
-  functions = ".netlify/functions"
+  functions = ".netlify/functions-serve"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF apps/server/"
 
 [build.environment]
   NODE_VERSION = "22"
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/server/:splat"
+  to = "/.netlify/functions/server"
   status = 200
 
 [[redirects]]
@@ -18,8 +19,9 @@
   status = 200
 
 [dev]
-  command = "npx nx serve web"
+  command = "npm run start"
+  framework = "#custom"
   targetPort = 4200
   port = 8888
-  publish = "dist/apps/web/browser"
   autoLaunch = false
+  timeout = 120

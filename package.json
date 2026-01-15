@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "nx serve",
+    "start": "nx serve web",
     "build": "nx build",
     "watch": "nx build --watch --configuration development",
     "test": "nx test",
     "lint": "nx lint",
     "lint:fix": "nx lint --fix",
-    "prepare": "husky || true"
+    "prepare": "husky || true",
+    "dev:netlify": "NODE_ENV=production nx build server --configuration=production && netlify dev"
   },
   "private": true,
   "dependencies": {
@@ -22,7 +23,6 @@
     "@angular/platform-browser": "21.1.0",
     "@angular/platform-browser-dynamic": "21.1.0",
     "@angular/router": "21.1.0",
-    "@codegenie/serverless-express": "^4.17.1",
     "@floating-ui/dom": "^1.6.0",
     "@nestjs/cache-manager": "^3.1.0",
     "@nestjs/common": "^11.1.11",
