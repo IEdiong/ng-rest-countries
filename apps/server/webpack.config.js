@@ -6,7 +6,7 @@ const isProduction = process.env.NODE_ENV === "production";
 module.exports = {
   output: {
     path: isProduction
-      ? join(__dirname, "../../.netlify/functions-serve")
+      ? join(__dirname, "../../netlify/functions")
       : join(__dirname, "../../dist/apps/server"),
     filename: isProduction ? "server.js" : "main.js",
     libraryTarget: isProduction ? "commonjs2" : undefined,

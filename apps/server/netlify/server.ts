@@ -73,12 +73,19 @@ async function handleNetlifyRequest(
       }
     }
 
+    // Strip the Netlify function path prefix to get the actual API path
+    let pathname = url.pathname;
+    const functionPathPrefix = '/.netlify/functions/server';
+    if (pathname.startsWith(functionPathPrefix)) {
+      pathname = pathname.slice(functionPathPrefix.length) || '/';
+    }
+
     // Create Express-like request object
     const mockReq = {
       method: req.method,
-      url: url.pathname + url.search,
-      path: url.pathname,
-      originalUrl: url.pathname + url.search,
+      url: pathname + url.search,
+      path: pathname,
+      originalUrl: pathname + url.search,
       query: Object.fromEntries(url.searchParams),
       headers,
       body:
@@ -214,12 +221,19 @@ export const handler = async (
     body = Buffer.from(body, 'base64').toString('utf-8');
   }
 
+  // Strip the Netlify function path prefix to get the actual API path
+  let pathname = url.pathname;
+  const functionPathPrefix = '/.netlify/functions/server';
+  if (pathname.startsWith(functionPathPrefix)) {
+    pathname = pathname.slice(functionPathPrefix.length) || '/';
+  }
+
   return new Promise((resolve) => {
     const mockReq = {
       method: event.httpMethod || 'GET',
-      url: url.pathname + url.search,
-      path: url.pathname,
-      originalUrl: url.pathname + url.search,
+      url: pathname + url.search,
+      path: pathname,
+      originalUrl: pathname + url.search,
       query: event.queryStringParameters || {},
       headers,
       body:
@@ -301,4 +315,9 @@ export const handler = async (
       });
     });
   });
+};
+
+// Netlify function config for routing
+export const config = {
+  path: ['/api', '/api/*'],
 };
