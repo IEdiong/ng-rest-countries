@@ -9,6 +9,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*.ts", "netlify/**/*.ts"],
+  "include": ["src/**/*.ts", "netlify/**/*.ts", "src/serverless.ts"],
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }

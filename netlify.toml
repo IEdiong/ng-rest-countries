@@ -6,6 +6,9 @@
 
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
+  # Include the assets directory with the function bundle
+  included_files = ["netlify/functions/assets/**"]
 
 [build.environment]
   NODE_VERSION = "22"
@@ -19,7 +22,7 @@
 
 [[redirects]]
   from = "/api"
-  to = "/.netlify/functions/server"
+  to = "/.netlify/functions"
   status = 200
   force = true
 

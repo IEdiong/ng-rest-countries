@@ -40,9 +40,21 @@ export class CountriesService implements OnModuleInit {
   }
 
   private loadCountries(): void {
-    const filePath = join(__dirname, './assets/countries.json');
+    const { existsSync, readFileSync: fsReadFileSync } = require('fs');
+    const { resolve } = require('path');
+
+    // Assets are included via netlify.toml included_files for production
+    // For dev mode, we need to check multiple locations
+    const primaryPath = join(__dirname, 'assets', 'countries.json');
+    const fallbackPath = resolve(
+      process.cwd(),
+      'netlify/functions/assets/countries.json',
+    );
+
+    const filePath = existsSync(primaryPath) ? primaryPath : fallbackPath;
+
     const rawData = JSON.parse(
-      readFileSync(filePath, 'utf-8'),
+      fsReadFileSync(filePath, 'utf-8'),
     ) as RawCountryData[];
 
     this.countries = rawData.map((raw) => this.transformCountry(raw));

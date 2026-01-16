@@ -15,7 +15,7 @@ module.exports = {
     new NxAppWebpackPlugin({
       target: "node",
       compiler: "tsc",
-      main: isProduction ? "./netlify/server.ts" : "./src/main.ts",
+      main: isProduction ? "./src/serverless.ts" : "./src/main.ts",
       tsConfig: "./tsconfig.app.json",
       assets: ["./src/assets"],
       optimization: false,
