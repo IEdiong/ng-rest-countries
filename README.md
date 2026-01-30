@@ -41,17 +41,15 @@ Users should be able to:
 
 ### Built with
 
-- Semantic HTML5 markup
-- Flexbox
-- CSS Grid
-- Desktop-first workflow
+- [Nx](https://nx.dev) - Nx workspace
 - [TailwindCSS](https://tailwindcss.com/) - For styles
 - [RxJs](https://rxjs.dev/) - For state management and data fetching
 - [Angular](https://angular.dev/) - Frontend framework
+- [NestJs](https://nestjs.com/) - Backend framework
 
 ### What I learned
 
-I learnt a lot of things about RxJs and Angular.
+- How to deploy a Nestjs app as a netlify function
 
 ### Useful resources
 
